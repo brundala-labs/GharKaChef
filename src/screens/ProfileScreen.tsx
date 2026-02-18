@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
 import { useApp } from '../context/AppContext';
 import { GlassCard } from '../components/GlassCard';
 import { colors, spacing, radius, typography } from '../theme';
@@ -27,11 +26,7 @@ export function ProfileScreen({ navigation }: any) {
         <GlassCard style={styles.card}>
           <View style={styles.cardInner}>
             <View style={[styles.avatar, { backgroundColor: isChef ? 'rgba(46,196,182,0.15)' : 'rgba(255,107,53,0.15)' }]}>
-              <Ionicons
-                name={isChef ? 'flame' : 'person'}
-                size={32}
-                color={isChef ? colors.secondary : colors.primary}
-              />
+              <Text style={{ fontSize: 32 }}>{isChef ? '🔥' : '👤'}</Text>
             </View>
             <Text style={styles.name}>{profile.name}</Text>
             <View style={[styles.roleBadge, { backgroundColor: isChef ? colors.secondary : colors.primary }]}>
@@ -43,7 +38,7 @@ export function ProfileScreen({ navigation }: any) {
         <GlassCard style={styles.card}>
           <View style={styles.detailsInner}>
             <View style={styles.detailRow}>
-              <Ionicons name="call-outline" size={18} color={colors.textSecondary} />
+              <Text style={{ fontSize: 16 }}>📞</Text>
               <View>
                 <Text style={styles.detailLabel}>Phone</Text>
                 <Text style={styles.detailValue}>{profile.phone}</Text>
@@ -52,7 +47,7 @@ export function ProfileScreen({ navigation }: any) {
 
             {isChef && profile.cuisineType && (
               <View style={styles.detailRow}>
-                <Ionicons name="restaurant-outline" size={18} color={colors.textSecondary} />
+                <Text style={{ fontSize: 16 }}>🍽</Text>
                 <View>
                   <Text style={styles.detailLabel}>Cuisine</Text>
                   <Text style={styles.detailValue}>{profile.cuisineType}</Text>
@@ -62,7 +57,7 @@ export function ProfileScreen({ navigation }: any) {
 
             {isChef && profile.kitchenDescription && (
               <View style={styles.detailRow}>
-                <Ionicons name="home-outline" size={18} color={colors.textSecondary} />
+                <Text style={{ fontSize: 16 }}>🏠</Text>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.detailLabel}>Kitchen</Text>
                   <Text style={styles.detailValue}>{profile.kitchenDescription}</Text>
@@ -72,7 +67,7 @@ export function ProfileScreen({ navigation }: any) {
 
             {!isChef && profile.dietaryPreferences && profile.dietaryPreferences.length > 0 && (
               <View style={styles.detailRow}>
-                <Ionicons name="leaf-outline" size={18} color={colors.textSecondary} />
+                <Text style={{ fontSize: 16 }}>🌿</Text>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.detailLabel}>Dietary Preferences</Text>
                   <View style={styles.tagRow}>
@@ -102,7 +97,7 @@ export function ProfileScreen({ navigation }: any) {
         </GlassCard>
 
         <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout} activeOpacity={0.8}>
-          <Ionicons name="log-out-outline" size={20} color={colors.danger} />
+          <Text style={{ fontSize: 18 }}>🚪</Text>
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
       </View>

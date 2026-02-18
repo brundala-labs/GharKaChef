@@ -12,17 +12,16 @@ import {
   Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
 import { useApp } from '../context/AppContext';
 import { GlassCard } from '../components/GlassCard';
 import { colors, spacing, radius, typography } from '../theme';
 import { MenuItem, VerifiedBadge, PlannedMeal, MenuModifier } from '../types';
 import { generatePickupSlots, formatPrice } from '../utils';
 
-const BADGE_ICONS: Record<VerifiedBadge, string> = {
-  'Health Permit': 'medkit',
-  'Inspected Kitchen': 'home',
-  'Food Handler': 'person',
+const BADGE_EMOJI: Record<VerifiedBadge, string> = {
+  'Health Permit': '🏥',
+  'Inspected Kitchen': '🏠',
+  'Food Handler': '👤',
 };
 
 function formatDate(dateStr: string) {
@@ -152,7 +151,7 @@ export function ChefDetailsScreen({ route, navigation }: any) {
               <Text style={styles.menuPrice}>{formatPrice(item.price)}</Text>
               {hasModifiers && (
                 <View style={styles.customizableBadge}>
-                  <Ionicons name="options-outline" size={10} color={colors.secondary} />
+                  <Text style={{ fontSize: 9 }}>⚙️</Text>
                   <Text style={styles.customizableText}>Customizable</Text>
                 </View>
               )}
@@ -163,7 +162,7 @@ export function ChefDetailsScreen({ route, navigation }: any) {
             onPress={() => handleAdd(item)}
             activeOpacity={0.7}
           >
-            <Ionicons name="add" size={20} color={inCart ? colors.white : colors.primary} />
+            <Text style={{ fontSize: 16, color: inCart ? colors.white : colors.primary, fontWeight: '700' }}>+</Text>
             {inCart && <Text style={styles.addBtnCount}>{inCart.quantity}</Text>}
           </TouchableOpacity>
         </View>
@@ -188,7 +187,7 @@ export function ChefDetailsScreen({ route, navigation }: any) {
 
               <View style={styles.metaRow}>
                 <View style={styles.ratingRow}>
-                  <Ionicons name="star" size={16} color={colors.warning} />
+                  <Text style={{ fontSize: 14 }}>⭐</Text>
                   <Text style={styles.metaText}>{chef.rating}</Text>
                   {reviews.length > 0 && (
                     <Text style={styles.reviewCount}>({reviews.length})</Text>
@@ -206,7 +205,7 @@ export function ChefDetailsScreen({ route, navigation }: any) {
               <View style={styles.badgeRow}>
                 {chef.verifiedBadges.map((b) => (
                   <View key={b} style={styles.badge}>
-                    <Ionicons name={BADGE_ICONS[b] as any} size={12} color={colors.success} />
+                    <Text style={{ fontSize: 11 }}>{BADGE_EMOJI[b]}</Text>
                     <Text style={styles.badgeText}>{b}</Text>
                   </View>
                 ))}
@@ -214,7 +213,7 @@ export function ChefDetailsScreen({ route, navigation }: any) {
 
               {!chef.isOnline && (
                 <View style={styles.offlineBanner}>
-                  <Ionicons name="moon-outline" size={16} color={colors.danger} />
+                  <Text style={{ fontSize: 14 }}>🌙</Text>
                   <Text style={styles.offlineBannerText}>This chef is currently offline</Text>
                 </View>
               )}
@@ -223,7 +222,7 @@ export function ChefDetailsScreen({ route, navigation }: any) {
               {reviews.length > 0 && (
                 <View style={styles.reviewsSection}>
                   <View style={styles.reviewsHeader}>
-                    <Ionicons name="star" size={16} color={colors.warning} />
+                    <Text style={{ fontSize: 14 }}>⭐</Text>
                     <Text style={styles.reviewsTitle}>{avgRating} · {reviews.length} Reviews</Text>
                   </View>
                   {reviews.slice(0, 3).map((r) => (
@@ -232,7 +231,9 @@ export function ChefDetailsScreen({ route, navigation }: any) {
                         <Text style={styles.reviewAuthor}>{r.customerName}</Text>
                         <View style={styles.reviewStars}>
                           {[1, 2, 3, 4, 5].map((s) => (
-                            <Ionicons key={s} name={s <= r.rating ? 'star' : 'star-outline'} size={11} color={colors.warning} />
+                            <Text key={s} style={{ fontSize: 10, color: colors.warning }}>
+                              {s <= r.rating ? '⭐' : '☆'}
+                            </Text>
                           ))}
                         </View>
                       </View>
@@ -267,7 +268,7 @@ export function ChefDetailsScreen({ route, navigation }: any) {
                               style={[styles.preorderBtn, pm.currentOrders >= pm.maxOrders && styles.preorderBtnSoldOut]}
                               onPress={() => handlePreOrder(pm)}
                             >
-                              <Ionicons name="cart-outline" size={14} color={colors.white} />
+                              <Text style={{ fontSize: 11 }}>🛒</Text>
                               <Text style={styles.preorderBtnText}>
                                 {pm.currentOrders >= pm.maxOrders ? 'Sold Out' : 'Pre-order'}
                               </Text>
@@ -275,7 +276,7 @@ export function ChefDetailsScreen({ route, navigation }: any) {
                           </View>
                           {pm.isLimitedDrop && (
                             <View style={styles.limitedBadge}>
-                              <Ionicons name="flash" size={10} color={colors.white} />
+                              <Text style={{ fontSize: 9 }}>⚡</Text>
                               <Text style={styles.limitedBadgeText}>Limited Drop</Text>
                             </View>
                           )}
@@ -293,7 +294,7 @@ export function ChefDetailsScreen({ route, navigation }: any) {
                   <GlassCard style={styles.weeklyPlanCard}>
                     <View style={styles.weeklyPlanInner}>
                       <View style={styles.weeklyPlanHeader}>
-                        <Ionicons name="calendar" size={20} color={colors.secondary} />
+                        <Text style={{ fontSize: 18 }}>📅</Text>
                         <Text style={styles.weeklyPlanTitle}>{chef.weeklyPlan.description}</Text>
                       </View>
                       <View style={styles.weeklyPlanMeta}>
@@ -320,7 +321,7 @@ export function ChefDetailsScreen({ route, navigation }: any) {
                         ))}
                       </View>
                       <TouchableOpacity style={styles.subscribeBtn} onPress={handleSubscribe}>
-                        <Ionicons name="calendar" size={16} color={colors.white} />
+                        <Text style={{ fontSize: 14 }}>📅</Text>
                         <Text style={styles.subscribeBtnText}>Subscribe to Weekly Plan</Text>
                       </TouchableOpacity>
                     </View>
@@ -348,7 +349,7 @@ export function ChefDetailsScreen({ route, navigation }: any) {
               <View style={styles.slotsRow}>
                 {pickupSlots.map((slot) => (
                   <View key={slot.label} style={styles.slotChip}>
-                    <Ionicons name="time-outline" size={12} color={colors.primary} />
+                    <Text style={{ fontSize: 10 }}>⏰</Text>
                     <Text style={styles.slotText}>{slot.label}</Text>
                   </View>
                 ))}
@@ -377,7 +378,7 @@ export function ChefDetailsScreen({ route, navigation }: any) {
             </View>
             <View style={styles.footerBtn}>
               <Text style={styles.footerBtnText}>Go to Cart</Text>
-              <Ionicons name="arrow-forward" size={18} color={colors.white} />
+              <Text style={{ color: colors.white, fontSize: 14 }}>→</Text>
             </View>
           </TouchableOpacity>
         </GlassCard>
@@ -390,7 +391,7 @@ export function ChefDetailsScreen({ route, navigation }: any) {
             <View style={styles.modModalHeader}>
               <Text style={styles.modModalTitle}>Customize Your Order</Text>
               <TouchableOpacity onPress={() => setShowModifierModal(false)}>
-                <Ionicons name="close" size={24} color={colors.text} />
+                <Text style={{ fontSize: 22, color: colors.text }}>✕</Text>
               </TouchableOpacity>
             </View>
             {selectedItem && (
@@ -430,7 +431,7 @@ export function ChefDetailsScreen({ route, navigation }: any) {
                 ))}
 
                 <TouchableOpacity style={styles.modAddBtn} onPress={handleAddWithModifiers}>
-                  <Ionicons name="cart-outline" size={18} color={colors.white} />
+                  <Text style={{ fontSize: 16 }}>🛒</Text>
                   <Text style={styles.modAddBtnText}>
                     Add to Cart · {formatPrice(
                       (selectedItem?.price || 0) +
@@ -499,7 +500,6 @@ const styles = StyleSheet.create({
   },
   offlineBannerText: { ...typography.bodySmall, color: colors.danger },
 
-  // Reviews
   reviewsSection: { marginBottom: spacing.md },
   reviewsHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.sm },
   reviewsTitle: { ...typography.h3 },
@@ -515,7 +515,6 @@ const styles = StyleSheet.create({
   reviewStars: { flexDirection: 'row', gap: 1 },
   reviewText: { ...typography.caption, color: colors.textSecondary },
 
-  // Planned Meals
   plannedSection: { marginBottom: spacing.md },
   sectionTitle: { ...typography.h3, marginBottom: spacing.sm, marginTop: spacing.sm },
   plannedCard: { marginBottom: spacing.sm },
@@ -553,7 +552,6 @@ const styles = StyleSheet.create({
   },
   limitedBadgeText: { ...typography.caption, color: colors.white, fontWeight: '700', fontSize: 9 },
 
-  // Weekly Plan
   weeklySection: { marginBottom: spacing.md },
   weeklyPlanCard: {},
   weeklyPlanInner: { padding: spacing.md },
@@ -582,7 +580,6 @@ const styles = StyleSheet.create({
   },
   subscribeBtnText: { ...typography.button, color: colors.white, fontSize: 14 },
 
-  // Prep / Slots
   segmented: {
     flexDirection: 'row',
     backgroundColor: 'rgba(255,255,255,0.5)',
@@ -616,7 +613,6 @@ const styles = StyleSheet.create({
   },
   slotText: { ...typography.caption, color: colors.primary, fontWeight: '600' },
 
-  // Menu Items
   menuCard: { marginHorizontal: spacing.lg, marginBottom: spacing.sm },
   menuRow: {
     flexDirection: 'row',
@@ -667,7 +663,6 @@ const styles = StyleSheet.create({
   addBtnActive: { backgroundColor: colors.primary },
   addBtnCount: { ...typography.caption, color: colors.white, fontWeight: '700' },
 
-  // Footer
   footer: {
     position: 'absolute',
     bottom: 30,
@@ -702,7 +697,6 @@ const styles = StyleSheet.create({
   },
   footerBtnText: { ...typography.button, color: colors.white },
 
-  // Modifier Modal
   modModalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',

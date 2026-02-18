@@ -1,10 +1,9 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Ionicons } from '@expo/vector-icons';
 import { AppProvider, useApp } from './src/context/AppContext';
 import { WelcomeScreen } from './src/screens/WelcomeScreen';
 import { CustomerSignupScreen } from './src/screens/CustomerSignupScreen';
@@ -12,6 +11,7 @@ import { ChefSignupScreen } from './src/screens/ChefSignupScreen';
 import { BrowseScreen } from './src/screens/BrowseScreen';
 import { ChefDetailsScreen } from './src/screens/ChefDetailsScreen';
 import { CartScreen } from './src/screens/CartScreen';
+import { PreOrderScreen } from './src/screens/PreOrderScreen';
 import { ChefModeScreen } from './src/screens/ChefModeScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { OrderHistoryScreen } from './src/screens/OrderHistoryScreen';
@@ -87,8 +87,18 @@ function CustomerTabs() {
         component={OrderFoodStack}
         options={{
           tabBarLabel: 'Home',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="restaurant-outline" size={size} color={color} />
+          tabBarIcon: ({ color }) => (
+            <Text style={{ fontSize: 20, color }}>🍽</Text>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="PreOrder"
+        component={PreOrderScreen}
+        options={{
+          tabBarLabel: 'Pre-Order',
+          tabBarIcon: ({ color }) => (
+            <Text style={{ fontSize: 20, color }}>📅</Text>
           ),
         }}
       />
@@ -97,8 +107,8 @@ function CustomerTabs() {
         component={OrderHistoryScreen}
         options={{
           tabBarLabel: 'My Orders',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="receipt-outline" size={size} color={color} />
+          tabBarIcon: ({ color }) => (
+            <Text style={{ fontSize: 20, color }}>🧾</Text>
           ),
         }}
       />
@@ -107,8 +117,8 @@ function CustomerTabs() {
         component={ProfileScreen}
         options={{
           tabBarLabel: 'Profile',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
+          tabBarIcon: ({ color }) => (
+            <Text style={{ fontSize: 20, color }}>👤</Text>
           ),
         }}
       />
@@ -132,8 +142,8 @@ function ChefTabs() {
         component={ChefModeScreen}
         options={{
           tabBarLabel: 'Dashboard',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="flame-outline" size={size} color={color} />
+          tabBarIcon: ({ color }) => (
+            <Text style={{ fontSize: 20, color }}>🔥</Text>
           ),
         }}
       />
@@ -142,8 +152,8 @@ function ChefTabs() {
         component={ProfileScreen}
         options={{
           tabBarLabel: 'Profile',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
+          tabBarIcon: ({ color }) => (
+            <Text style={{ fontSize: 20, color }}>👤</Text>
           ),
         }}
       />

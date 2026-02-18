@@ -11,7 +11,6 @@ import {
   Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
 import { useApp } from '../context/AppContext';
 import { GlassCard } from '../components/GlassCard';
 import { colors, spacing, radius, typography } from '../theme';
@@ -50,7 +49,7 @@ export function ChefSignupScreen({ navigation }: any) {
     <LinearGradient colors={[...colors.background]} style={styles.container}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={22} color={colors.text} />
+          <Text style={{ fontSize: 20 }}>←</Text>
         </TouchableOpacity>
 
         <Text style={styles.title}>Become a Chef</Text>
@@ -85,11 +84,9 @@ export function ChefSignupScreen({ navigation }: any) {
               <Text style={cuisine ? styles.selectText : styles.selectPlaceholder}>
                 {cuisine || 'Select your cuisine...'}
               </Text>
-              <Ionicons
-                name={showCuisineList ? 'chevron-up' : 'chevron-down'}
-                size={18}
-                color={colors.textSecondary}
-              />
+              <Text style={{ fontSize: 14, color: colors.textSecondary }}>
+                {showCuisineList ? '▲' : '▼'}
+              </Text>
             </TouchableOpacity>
 
             {showCuisineList && (
@@ -142,7 +139,7 @@ export function ChefSignupScreen({ navigation }: any) {
           onPress={handleSignup}
           activeOpacity={0.8}
         >
-          <Ionicons name="flame" size={20} color={colors.white} />
+          <Text style={{ fontSize: 18 }}>🔥</Text>
           <Text style={styles.signupBtnText}>Start Selling</Text>
         </TouchableOpacity>
       </ScrollView>

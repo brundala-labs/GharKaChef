@@ -12,7 +12,6 @@ import {
   Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
 import { useApp } from '../context/AppContext';
 import { GlassCard } from '../components/GlassCard';
 import { colors, spacing, radius, typography } from '../theme';
@@ -57,9 +56,7 @@ export function ChefModeScreen() {
   const [selectedChefId, setSelectedChefId] = useState(state.chefs[0]?.id || '');
   const [showChefPicker, setShowChefPicker] = useState(false);
   const [showPlanMealModal, setShowPlanMealModal] = useState(false);
-  const [showWeeklySetup, setShowWeeklySetup] = useState(false);
 
-  // Plan a Meal form state
   const [mealName, setMealName] = useState('');
   const [mealDesc, setMealDesc] = useState('');
   const [mealPrice, setMealPrice] = useState('');
@@ -151,15 +148,15 @@ export function ChefModeScreen() {
 
         <View style={styles.orderDetails}>
           <View style={styles.detailRow}>
-            <Ionicons name="person-outline" size={14} color={colors.textSecondary} />
+            <Text style={{ fontSize: 12 }}>👤</Text>
             <Text style={styles.detailText}>{item.customerName}</Text>
           </View>
           <View style={styles.detailRow}>
-            <Ionicons name="call-outline" size={14} color={colors.textSecondary} />
+            <Text style={{ fontSize: 12 }}>📞</Text>
             <Text style={styles.detailText}>{item.customerPhone}</Text>
           </View>
           <View style={styles.detailRow}>
-            <Ionicons name="time-outline" size={14} color={colors.textSecondary} />
+            <Text style={{ fontSize: 12 }}>⏰</Text>
             <Text style={styles.detailText}>Pickup: {item.pickupSlot}</Text>
           </View>
         </View>
@@ -181,7 +178,7 @@ export function ChefModeScreen() {
                 style={styles.declineBtn}
                 onPress={() => handleDecline(item.id)}
               >
-                <Ionicons name="close" size={16} color={colors.danger} />
+                <Text style={{ fontSize: 14, color: colors.danger }}>✕</Text>
                 <Text style={styles.declineBtnText}>Decline</Text>
               </TouchableOpacity>
             )}
@@ -189,7 +186,7 @@ export function ChefModeScreen() {
               style={styles.advanceBtn}
               onPress={() => handleAdvanceStatus(item.id, item.status)}
             >
-              <Ionicons name="arrow-forward" size={16} color={colors.white} />
+              <Text style={{ color: colors.white, fontSize: 14 }}>→</Text>
               <Text style={styles.advanceBtnText}>
                 {NEXT_ACTION[item.status] || 'Next'}
               </Text>
@@ -199,14 +196,14 @@ export function ChefModeScreen() {
 
         {item.status === 'ready' && (
           <View style={styles.readyBanner}>
-            <Ionicons name="checkmark-circle" size={18} color={colors.success} />
+            <Text style={{ fontSize: 16 }}>✅</Text>
             <Text style={styles.readyText}>Ready for customer pickup!</Text>
           </View>
         )}
 
         {item.status === 'declined' && (
           <View style={styles.declinedBanner}>
-            <Ionicons name="close-circle" size={18} color={colors.danger} />
+            <Text style={{ fontSize: 16, color: colors.danger }}>✕</Text>
             <Text style={styles.declinedText}>Order declined</Text>
           </View>
         )}
@@ -225,13 +222,11 @@ export function ChefModeScreen() {
         onPress={() => setShowChefPicker(!showChefPicker)}
         activeOpacity={0.7}
       >
-        <Ionicons name="person-circle-outline" size={22} color={colors.primary} />
+        <Text style={{ fontSize: 20 }}>👤</Text>
         <Text style={styles.pickerText}>{chef.name}</Text>
-        <Ionicons
-          name={showChefPicker ? 'chevron-up' : 'chevron-down'}
-          size={18}
-          color={colors.textSecondary}
-        />
+        <Text style={{ fontSize: 14, color: colors.textSecondary }}>
+          {showChefPicker ? '▲' : '▼'}
+        </Text>
       </TouchableOpacity>
 
       {showChefPicker && (
@@ -286,7 +281,7 @@ export function ChefModeScreen() {
 
       {!chef.isOnline && (
         <View style={styles.offlineBanner}>
-          <Ionicons name="moon-outline" size={18} color={colors.danger} />
+          <Text style={{ fontSize: 16 }}>🌙</Text>
           <Text style={styles.offlineBannerText}>
             You're offline — not accepting new orders
           </Text>
@@ -327,11 +322,11 @@ export function ChefModeScreen() {
           </View>
           <View style={styles.stepperRow}>
             <TouchableOpacity style={styles.stepperBtn} onPress={() => handleCapacity(-1)}>
-              <Ionicons name="remove" size={20} color={colors.primary} />
+              <Text style={{ fontSize: 18, color: colors.primary, fontWeight: '700' }}>−</Text>
             </TouchableOpacity>
             <Text style={styles.stepperValue}>{chef.dailyCapacity}</Text>
             <TouchableOpacity style={styles.stepperBtn} onPress={() => handleCapacity(1)}>
-              <Ionicons name="add" size={20} color={colors.primary} />
+              <Text style={{ fontSize: 18, color: colors.primary, fontWeight: '700' }}>+</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -344,7 +339,7 @@ export function ChefModeScreen() {
         onPress={() => setShowPlanMealModal(true)}
         activeOpacity={0.7}
       >
-        <Ionicons name="add-circle" size={22} color={colors.white} />
+        <Text style={{ fontSize: 18 }}>+</Text>
         <Text style={styles.planMealBtnText}>Plan a New Meal</Text>
       </TouchableOpacity>
 
@@ -362,7 +357,7 @@ export function ChefModeScreen() {
                   </View>
                   {pm.isLimitedDrop && (
                     <View style={styles.limitedDropBadge}>
-                      <Ionicons name="flash" size={12} color={colors.white} />
+                      <Text style={{ fontSize: 10 }}>⚡</Text>
                       <Text style={styles.limitedDropText}>Drop</Text>
                     </View>
                   )}
@@ -405,7 +400,7 @@ export function ChefModeScreen() {
         <GlassCard style={styles.controlCard}>
           <View style={styles.controlInner}>
             <View style={styles.weeklyPlanHeader}>
-              <Ionicons name="calendar" size={20} color={colors.primary} />
+              <Text style={{ fontSize: 18 }}>📅</Text>
               <Text style={styles.weeklyPlanTitle}>{chef.weeklyPlan.description}</Text>
             </View>
             <View style={styles.weeklyPlanDetails}>
@@ -431,9 +426,7 @@ export function ChefModeScreen() {
       {/* Reviews */}
       <Text style={styles.sectionTitle}>
         Reviews ({reviews.length})
-        {reviews.length > 0 && (
-          <Text style={{ color: colors.warning }}> · {avgRating} <Ionicons name="star" size={14} color={colors.warning} /></Text>
-        )}
+        {reviews.length > 0 && ` · ${avgRating} ⭐`}
       </Text>
       {reviews.length > 0 ? (
         <View style={styles.reviewsList}>
@@ -444,12 +437,9 @@ export function ChefModeScreen() {
                   <Text style={styles.reviewAuthor}>{r.customerName}</Text>
                   <View style={styles.reviewStars}>
                     {[1, 2, 3, 4, 5].map((s) => (
-                      <Ionicons
-                        key={s}
-                        name={s <= r.rating ? 'star' : 'star-outline'}
-                        size={12}
-                        color={colors.warning}
-                      />
+                      <Text key={s} style={{ fontSize: 10, color: colors.warning }}>
+                        {s <= r.rating ? '⭐' : '☆'}
+                      </Text>
                     ))}
                   </View>
                 </View>
@@ -481,7 +471,7 @@ export function ChefModeScreen() {
         ListHeaderComponent={renderHeaderContent}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Ionicons name="receipt-outline" size={48} color={colors.textLight} />
+            <Text style={{ fontSize: 48 }}>🧾</Text>
             <Text style={styles.emptyText}>No orders yet</Text>
             <Text style={styles.emptySubtext}>
               Place an order from the "Order Food" tab to see it here
@@ -498,7 +488,7 @@ export function ChefModeScreen() {
               <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>Plan a New Meal</Text>
                 <TouchableOpacity onPress={() => setShowPlanMealModal(false)}>
-                  <Ionicons name="close" size={24} color={colors.text} />
+                  <Text style={{ fontSize: 22, color: colors.text }}>✕</Text>
                 </TouchableOpacity>
               </View>
 
@@ -603,7 +593,7 @@ export function ChefModeScreen() {
                 onPress={handleCreatePlannedMeal}
                 disabled={!mealName.trim() || !mealPrice.trim()}
               >
-                <Ionicons name="checkmark-circle" size={20} color={colors.white} />
+                <Text style={{ fontSize: 18 }}>✓</Text>
                 <Text style={styles.createBtnText}>Create Planned Meal</Text>
               </TouchableOpacity>
             </ScrollView>
@@ -697,7 +687,6 @@ const styles = StyleSheet.create({
   stepperValue: { ...typography.h2, minWidth: 30, textAlign: 'center' },
   sectionTitle: { ...typography.h3, marginTop: spacing.md, marginBottom: spacing.md },
 
-  // Plan a Meal
   planMealBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -730,7 +719,6 @@ const styles = StyleSheet.create({
   statValue: { ...typography.h3, color: colors.primary },
   statLabel: { ...typography.caption, color: colors.textSecondary },
 
-  // Weekly Plan
   weeklyPlanHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.sm },
   weeklyPlanTitle: { ...typography.body, fontWeight: '600', flex: 1 },
   weeklyPlanDetails: { marginTop: spacing.xs },
@@ -744,7 +732,6 @@ const styles = StyleSheet.create({
   },
   dietaryTagText: { ...typography.caption, color: colors.success, fontWeight: '600' },
 
-  // Reviews
   reviewsList: { gap: spacing.sm, marginBottom: spacing.md },
   reviewCard: { marginBottom: spacing.sm },
   reviewInner: { padding: spacing.md },
@@ -753,11 +740,9 @@ const styles = StyleSheet.create({
   reviewStars: { flexDirection: 'row', gap: 1 },
   reviewText: { ...typography.bodySmall, color: colors.textSecondary },
 
-  // Empty states
   emptySmall: { paddingVertical: spacing.md, alignItems: 'center', marginBottom: spacing.md },
   emptySmallText: { ...typography.bodySmall, color: colors.textLight },
 
-  // Orders
   orderCard: { marginBottom: spacing.md },
   orderInner: { padding: spacing.lg },
   orderHeader: {
@@ -835,7 +820,6 @@ const styles = StyleSheet.create({
   emptyText: { ...typography.body, color: colors.textLight },
   emptySubtext: { ...typography.bodySmall, color: colors.textLight, textAlign: 'center' },
 
-  // Modal
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',

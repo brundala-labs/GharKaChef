@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
 import { GlassCard } from '../components/GlassCard';
 import { colors, spacing, radius, typography } from '../theme';
 
@@ -25,7 +24,7 @@ export function WelcomeScreen({ navigation }: any) {
             <GlassCard style={styles.roleCard}>
               <View style={styles.roleContent}>
                 <View style={[styles.iconCircle, { backgroundColor: 'rgba(255,107,53,0.15)' }]}>
-                  <Ionicons name="restaurant" size={32} color={colors.primary} />
+                  <Text style={{ fontSize: 32 }}>🍽</Text>
                 </View>
                 <Text style={styles.roleTitle}>Order Food</Text>
                 <Text style={styles.roleDesc}>
@@ -33,7 +32,7 @@ export function WelcomeScreen({ navigation }: any) {
                 </Text>
                 <View style={styles.roleBtn}>
                   <Text style={styles.roleBtnText}>Get Started</Text>
-                  <Ionicons name="arrow-forward" size={16} color={colors.white} />
+                  <Text style={{ color: colors.white, fontSize: 14 }}>→</Text>
                 </View>
               </View>
             </GlassCard>
@@ -46,7 +45,7 @@ export function WelcomeScreen({ navigation }: any) {
             <GlassCard style={styles.roleCard}>
               <View style={styles.roleContent}>
                 <View style={[styles.iconCircle, { backgroundColor: 'rgba(46,196,182,0.15)' }]}>
-                  <Ionicons name="flame" size={32} color={colors.secondary} />
+                  <Text style={{ fontSize: 32 }}>🔥</Text>
                 </View>
                 <Text style={styles.roleTitle}>I'm a Chef</Text>
                 <Text style={styles.roleDesc}>
@@ -54,7 +53,7 @@ export function WelcomeScreen({ navigation }: any) {
                 </Text>
                 <View style={[styles.roleBtn, { backgroundColor: colors.secondary }]}>
                   <Text style={styles.roleBtnText}>Start Selling</Text>
-                  <Ionicons name="arrow-forward" size={16} color={colors.white} />
+                  <Text style={{ color: colors.white, fontSize: 14 }}>→</Text>
                 </View>
               </View>
             </GlassCard>
@@ -62,7 +61,7 @@ export function WelcomeScreen({ navigation }: any) {
         </View>
 
         <View style={styles.demoBanner}>
-          <Ionicons name="information-circle-outline" size={14} color={colors.primary} />
+          <Text style={{ fontSize: 12 }}>ℹ️</Text>
           <Text style={styles.demoText}>Demo app — no real transactions</Text>
         </View>
       </View>

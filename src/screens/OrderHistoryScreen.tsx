@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
 import { useApp } from '../context/AppContext';
 import { GlassCard } from '../components/GlassCard';
 import { colors, spacing, radius, typography } from '../theme';
@@ -44,7 +43,7 @@ export function OrderHistoryScreen() {
 
           {chef && (
             <View style={styles.chefRow}>
-              <Ionicons name="restaurant-outline" size={14} color={colors.textSecondary} />
+              <Text style={{ fontSize: 12 }}>🍽</Text>
               <Text style={styles.chefName}>{chef.name} · {chef.cuisine}</Text>
             </View>
           )}
@@ -60,7 +59,7 @@ export function OrderHistoryScreen() {
 
           <View style={styles.orderFooter}>
             <View style={styles.footerDetail}>
-              <Ionicons name="time-outline" size={14} color={colors.textSecondary} />
+              <Text style={{ fontSize: 12 }}>⏰</Text>
               <Text style={styles.footerText}>Pickup: {item.pickupSlot}</Text>
             </View>
             <Text style={styles.totalText}>${item.total.toFixed(2)}</Text>
@@ -86,7 +85,7 @@ export function OrderHistoryScreen() {
         }
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Ionicons name="receipt-outline" size={48} color={colors.textLight} />
+            <Text style={{ fontSize: 48 }}>🧾</Text>
             <Text style={styles.emptyText}>No orders yet</Text>
             <Text style={styles.emptySubtext}>
               Browse chefs and place your first order!

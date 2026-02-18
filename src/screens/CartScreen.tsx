@@ -12,7 +12,6 @@ import {
   Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
 import { useApp } from '../context/AppContext';
 import { GlassCard } from '../components/GlassCard';
 import { colors, spacing, radius, typography } from '../theme';
@@ -97,14 +96,14 @@ export function CartScreen({ route, navigation }: any) {
             style={styles.qtyBtn}
             onPress={() => handleQuantity(item.menuItem.id, -1)}
           >
-            <Ionicons name="remove" size={18} color={colors.primary} />
+            <Text style={{ fontSize: 16, color: colors.primary, fontWeight: '700' }}>−</Text>
           </TouchableOpacity>
           <Text style={styles.qtyText}>{item.quantity}</Text>
           <TouchableOpacity
             style={styles.qtyBtn}
             onPress={() => handleQuantity(item.menuItem.id, 1)}
           >
-            <Ionicons name="add" size={18} color={colors.primary} />
+            <Text style={{ fontSize: 16, color: colors.primary, fontWeight: '700' }}>+</Text>
           </TouchableOpacity>
         </View>
         <Text style={styles.lineTotal}>
@@ -154,11 +153,7 @@ export function CartScreen({ route, navigation }: any) {
                         ]}
                         onPress={() => setSelectedSlot(slot.label)}
                       >
-                        <Ionicons
-                          name="time-outline"
-                          size={14}
-                          color={selectedSlot === slot.label ? colors.white : colors.primary}
-                        />
+                        <Text style={{ fontSize: 12 }}>⏰</Text>
                         <Text
                           style={[
                             styles.slotText,
@@ -197,7 +192,7 @@ export function CartScreen({ route, navigation }: any) {
                     onPress={handlePlaceOrder}
                     activeOpacity={0.8}
                   >
-                    <Ionicons name="checkmark-circle" size={22} color={colors.white} />
+                    <Text style={{ fontSize: 20 }}>✓</Text>
                     <Text style={styles.placeBtnText}>Place Order · {formatPrice(total)}</Text>
                   </TouchableOpacity>
                 </>
@@ -205,7 +200,7 @@ export function CartScreen({ route, navigation }: any) {
 
               {cartItems.length === 0 && (
                 <View style={styles.empty}>
-                  <Ionicons name="cart-outline" size={48} color={colors.textLight} />
+                  <Text style={{ fontSize: 48 }}>🛒</Text>
                   <Text style={styles.emptyText}>Your cart is empty</Text>
                   <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Text style={styles.emptyLink}>Browse menus</Text>
@@ -221,7 +216,7 @@ export function CartScreen({ route, navigation }: any) {
         <View style={styles.modalOverlay}>
           <GlassCard style={styles.modalCard}>
             <View style={styles.modalContent}>
-              <Ionicons name="checkmark-circle" size={56} color={colors.success} />
+              <Text style={{ fontSize: 56 }}>✅</Text>
               <Text style={styles.modalTitle}>Order Placed!</Text>
               {placedOrder && (
                 <>

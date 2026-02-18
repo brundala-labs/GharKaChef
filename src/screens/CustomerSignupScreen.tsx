@@ -10,7 +10,6 @@ import {
   Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
 import { useApp } from '../context/AppContext';
 import { GlassCard } from '../components/GlassCard';
 import { colors, spacing, radius, typography } from '../theme';
@@ -51,7 +50,7 @@ export function CustomerSignupScreen({ navigation }: any) {
     <LinearGradient colors={[...colors.background]} style={styles.container}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={22} color={colors.text} />
+          <Text style={{ fontSize: 20 }}>←</Text>
         </TouchableOpacity>
 
         <Text style={styles.title}>Create Your Account</Text>
@@ -89,11 +88,7 @@ export function CustomerSignupScreen({ navigation }: any) {
                     style={[styles.dietaryChip, isSelected && styles.dietaryChipActive]}
                     onPress={() => toggleDietary(opt)}
                   >
-                    <Ionicons
-                      name={isSelected ? 'checkmark-circle' : 'ellipse-outline'}
-                      size={16}
-                      color={isSelected ? colors.white : colors.primary}
-                    />
+                    <Text style={{ fontSize: 14 }}>{isSelected ? '✓' : '○'}</Text>
                     <Text style={[styles.dietaryText, isSelected && styles.dietaryTextActive]}>
                       {opt}
                     </Text>
@@ -109,7 +104,7 @@ export function CustomerSignupScreen({ navigation }: any) {
           onPress={handleSignup}
           activeOpacity={0.8}
         >
-          <Ionicons name="restaurant" size={20} color={colors.white} />
+          <Text style={{ fontSize: 18 }}>🍽</Text>
           <Text style={styles.signupBtnText}>Start Ordering</Text>
         </TouchableOpacity>
       </ScrollView>
