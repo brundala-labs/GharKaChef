@@ -12,7 +12,14 @@ interface Props {
 export function GlassCard({ children, style, intensity = 40 }: Props) {
   if (Platform.OS === 'web') {
     return (
-      <View style={[styles.fallback, style]}>
+      <View
+        style={[
+          styles.fallback,
+          // @ts-ignore: web-only backdropFilter
+          { backdropFilter: `blur(${intensity / 4}px)`, WebkitBackdropFilter: `blur(${intensity / 4}px)` },
+          style,
+        ]}
+      >
         {children}
       </View>
     );
@@ -42,8 +49,13 @@ const styles = StyleSheet.create({
   },
   fallback: {
     borderRadius: radius.lg,
-    backgroundColor: 'rgba(255,255,255,0.75)',
+    backgroundColor: 'rgba(255,255,255,0.45)',
     borderWidth: 1,
-    borderColor: colors.cardBorder,
+    borderColor: 'rgba(255,255,255,0.6)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
   },
 });

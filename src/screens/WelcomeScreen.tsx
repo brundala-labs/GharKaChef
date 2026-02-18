@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { GlassCard } from '../components/GlassCard';
 import { colors, spacing, radius, typography } from '../theme';
@@ -64,6 +64,18 @@ export function WelcomeScreen({ navigation }: any) {
           <Text style={{ fontSize: 12 }}>ℹ️</Text>
           <Text style={styles.demoText}>Demo app — no real transactions</Text>
         </View>
+
+        {Platform.OS === 'web' && (
+          <TouchableOpacity
+            style={styles.resetBtn}
+            onPress={() => {
+              try { localStorage.clear(); } catch {}
+              window.location.reload();
+            }}
+          >
+            <Text style={styles.resetText}>🔄 Reset Demo Data</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </LinearGradient>
   );
@@ -111,4 +123,9 @@ const styles = StyleSheet.create({
     marginTop: spacing.xxxl,
   },
   demoText: { ...typography.caption, color: colors.primary },
+  resetBtn: {
+    alignItems: 'center',
+    marginTop: spacing.md,
+  },
+  resetText: { ...typography.caption, color: colors.textLight },
 });
