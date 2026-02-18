@@ -127,6 +127,12 @@ export function CartScreen({ route, navigation }: any) {
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={
             <View>
+              <TouchableOpacity style={styles.backRow} onPress={() => navigation.goBack()}>
+                <View style={styles.backBtn}>
+                  <Text style={styles.backBtnText}>←</Text>
+                </View>
+                <Text style={styles.backLabel}>Back</Text>
+              </TouchableOpacity>
               <Text style={styles.title}>Your Order</Text>
               <Text style={styles.subtitle}>From {chef.name} · {chef.cuisine}</Text>
             </View>
@@ -263,6 +269,27 @@ export function CartScreen({ route, navigation }: any) {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   list: { padding: spacing.lg, paddingBottom: 40 },
+  backRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    marginBottom: spacing.md,
+  },
+  backBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.85)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  backBtnText: { fontSize: 20, color: colors.text, fontWeight: '700', marginTop: -2 },
+  backLabel: { ...typography.body, color: colors.text, fontWeight: '600' },
   title: { ...typography.h1, marginBottom: spacing.xs },
   subtitle: { ...typography.bodySmall, marginBottom: spacing.lg },
   itemCard: { marginBottom: spacing.sm },

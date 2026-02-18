@@ -47,26 +47,8 @@ function OrderFoodStack() {
       }}
     >
       <Stack.Screen name="Browse" component={BrowseScreen} />
-      <Stack.Screen
-        name="ChefDetails"
-        component={ChefDetailsScreen}
-        options={{
-          headerShown: true,
-          headerTransparent: true,
-          headerTitle: '',
-          headerTintColor: colors.text,
-        }}
-      />
-      <Stack.Screen
-        name="Cart"
-        component={CartScreen}
-        options={{
-          headerShown: true,
-          headerTransparent: true,
-          headerTitle: '',
-          headerTintColor: colors.text,
-        }}
-      />
+      <Stack.Screen name="ChefDetails" component={ChefDetailsScreen} />
+      <Stack.Screen name="Cart" component={CartScreen} />
     </Stack.Navigator>
   );
 }

@@ -180,7 +180,12 @@ export function ChefDetailsScreen({ route, navigation }: any) {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <View>
-            <Image source={{ uri: chef.imageUrl }} style={styles.heroImage} />
+            <View>
+              <Image source={{ uri: chef.imageUrl }} style={styles.heroImage} />
+              <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+                <Text style={styles.backBtnText}>←</Text>
+              </TouchableOpacity>
+            </View>
             <View style={styles.headerContent}>
               <Text style={styles.chefName}>{chef.name}</Text>
               <Text style={styles.cuisine}>{chef.cuisine}</Text>
@@ -452,6 +457,24 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   list: { paddingBottom: 120 },
   heroImage: { width: '100%', height: 200 },
+  backBtn: {
+    position: 'absolute',
+    top: 12,
+    left: 12,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.85)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
+    zIndex: 10,
+  },
+  backBtnText: { fontSize: 20, color: colors.text, fontWeight: '700', marginTop: -2 },
   headerContent: { padding: spacing.lg },
   chefName: { ...typography.h1, marginBottom: spacing.xs },
   cuisine: { ...typography.bodySmall, marginBottom: spacing.md },
