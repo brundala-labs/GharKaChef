@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { CartItem, Order, OrderStatus, Chef } from '../types';
+import { CartItem, Order, OrderStatus, Chef, PlannedMeal, Review } from '../types';
 import { chefs as initialChefs } from '../data/mock';
 
 interface AppState {
@@ -10,7 +10,7 @@ interface AppState {
 }
 
 type Action =
-  | { type: 'ADD_TO_CART'; payload: { menuItem: CartItem['menuItem']; chefId: string } }
+  | { type: 'ADD_TO_CART'; payload: { menuItem: CartItem['menuItem']; chefId: string; isPreOrder?: boolean; selectedModifiers?: CartItem['selectedModifiers'] } }
   | { type: 'REMOVE_FROM_CART'; payload: { menuItemId: string } }
   | { type: 'UPDATE_QUANTITY'; payload: { menuItemId: string; delta: number } }
   | { type: 'CLEAR_CART' }
@@ -18,7 +18,11 @@ type Action =
   | { type: 'UPDATE_ORDER_STATUS'; payload: { orderId: string; status: OrderStatus } }
   | { type: 'TOGGLE_CHEF_ONLINE'; payload: { chefId: string } }
   | { type: 'SET_CHEF_PREP_WINDOW'; payload: { chefId: string; hours: 4 | 8 } }
-  | { type: 'SET_CHEF_CAPACITY'; payload: { chefId: string; capacity: number } };
+  | { type: 'SET_CHEF_CAPACITY'; payload: { chefId: string; capacity: number } }
+  | { type: 'CREATE_PLANNED_MEAL'; payload: { chefId: string; meal: PlannedMeal } }
+  | { type: 'PREORDER_MEAL'; payload: { mealId: string; chefId: string } }
+  | { type: 'ADD_REVIEW'; payload: Review }
+  | { type: 'SUBSCRIBE_WEEKLY'; payload: { chefId: string } };
 
 const initialState: AppState = {
   cart: [],
@@ -30,12 +34,11 @@ const initialState: AppState = {
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
     case 'ADD_TO_CART': {
-      const { menuItem, chefId } = action.payload;
-      // If switching chefs, clear cart
+      const { menuItem, chefId, isPreOrder, selectedModifiers } = action.payload;
       if (state.cartChefId && state.cartChefId !== chefId) {
         return {
           ...state,
-          cart: [{ menuItem, chefId, quantity: 1 }],
+          cart: [{ menuItem, chefId, quantity: 1, isPreOrder, selectedModifiers }],
           cartChefId: chefId,
         };
       }
@@ -51,7 +54,7 @@ function reducer(state: AppState, action: Action): AppState {
       }
       return {
         ...state,
-        cart: [...state.cart, { menuItem, chefId, quantity: 1 }],
+        cart: [...state.cart, { menuItem, chefId, quantity: 1, isPreOrder, selectedModifiers }],
         cartChefId: chefId,
       };
     }
@@ -78,7 +81,6 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, cart: [], cartChefId: null };
     case 'PLACE_ORDER': {
       const order = action.payload;
-      // Decrease chef capacity
       const updatedChefs = state.chefs.map((c) =>
         c.id === order.chefId ? { ...c, dailyCapacity: Math.max(0, c.dailyCapacity - 1) } : c
       );
@@ -122,6 +124,43 @@ function reducer(state: AppState, action: Action): AppState {
             : c
         ),
       };
+    case 'CREATE_PLANNED_MEAL':
+      return {
+        ...state,
+        chefs: state.chefs.map((c) =>
+          c.id === action.payload.chefId
+            ? { ...c, plannedMeals: [...(c.plannedMeals || []), action.payload.meal] }
+            : c
+        ),
+      };
+    case 'PREORDER_MEAL': {
+      const { mealId, chefId } = action.payload;
+      return {
+        ...state,
+        chefs: state.chefs.map((c) =>
+          c.id === chefId
+            ? {
+                ...c,
+                plannedMeals: (c.plannedMeals || []).map((pm) =>
+                  pm.id === mealId ? { ...pm, currentOrders: pm.currentOrders + 1 } : pm
+                ),
+              }
+            : c
+        ),
+      };
+    }
+    case 'ADD_REVIEW':
+      return {
+        ...state,
+        chefs: state.chefs.map((c) =>
+          c.id === action.payload.chefId
+            ? { ...c, reviews: [...(c.reviews || []), action.payload] }
+            : c
+        ),
+      };
+    case 'SUBSCRIBE_WEEKLY':
+      // Demo: no-op, just triggers UI confirmation
+      return state;
     default:
       return state;
   }

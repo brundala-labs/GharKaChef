@@ -1,4 +1,18 @@
-import { Chef } from '../types';
+import { Chef, PlannedMeal, Review, WeeklyPlan } from '../types';
+
+// Helper to get future dates relative to today
+function futureDate(daysFromNow: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + daysFromNow);
+  return d.toISOString().split('T')[0];
+}
+
+function futureDateTime(daysFromNow: number, hours: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + daysFromNow);
+  d.setHours(hours, 0, 0, 0);
+  return d.toISOString();
+}
 
 export const chefs: Chef[] = [
   {
@@ -14,14 +28,29 @@ export const chefs: Chef[] = [
     dailyCapacity: 8,
     imageUrl: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=400&h=250&fit=crop',
     menuItems: [
-      { id: 'm1-1', name: 'Hyderabadi Chicken Biryani', price: 16.99, description: 'Aromatic basmati rice layered with tender chicken, slow-cooked dum style', allergens: ['dairy', 'nuts'], isVeg: false },
+      { id: 'm1-1', name: 'Hyderabadi Chicken Biryani', price: 16.99, description: 'Aromatic basmati rice layered with tender chicken, slow-cooked dum style', allergens: ['dairy', 'nuts'], isVeg: false, modifiers: [
+        { id: 'mod-spice', name: 'Spice Level', options: [{ label: 'Mild', priceAdjustment: 0 }, { label: 'Medium', priceAdjustment: 0 }, { label: 'Hot', priceAdjustment: 0 }] },
+        { id: 'mod-portion', name: 'Portion Size', options: [{ label: 'Regular', priceAdjustment: 0 }, { label: 'Family (4 servings)', priceAdjustment: 12.00 }] },
+      ]},
       { id: 'm1-2', name: 'Pulihora (Tamarind Rice)', price: 9.99, description: 'Tangy tamarind rice with peanuts and curry leaves', allergens: ['nuts'], isVeg: true },
       { id: 'm1-3', name: 'Pesarattu', price: 8.99, description: 'Crispy green moong dal dosa served with ginger chutney', allergens: [], isVeg: true },
-      { id: 'm1-4', name: 'Chicken 65', price: 14.99, description: 'Spicy deep-fried chicken with curry leaves and green chillies', allergens: ['eggs'], isVeg: false },
+      { id: 'm1-4', name: 'Chicken 65', price: 14.99, description: 'Spicy deep-fried chicken with curry leaves and green chillies', allergens: ['eggs'], isVeg: false, modifiers: [
+        { id: 'mod-spice', name: 'Spice Level', options: [{ label: 'Mild', priceAdjustment: 0 }, { label: 'Medium', priceAdjustment: 0 }, { label: 'Hot', priceAdjustment: 0 }] },
+      ]},
       { id: 'm1-5', name: 'Gongura Mutton', price: 18.99, description: 'Tender mutton cooked with sorrel leaves, Andhra style', allergens: [], isVeg: false },
       { id: 'm1-6', name: 'Gulab Jamun (6 pcs)', price: 7.99, description: 'Soft milk dumplings soaked in rose-cardamom syrup', allergens: ['dairy', 'gluten'], isVeg: true },
       { id: 'm1-7', name: 'Lemon Rice', price: 8.49, description: 'Zesty lemon-tempered rice with peanuts and turmeric', allergens: ['nuts'], isVeg: true },
     ],
+    reviews: [
+      { id: 'r1-1', chefId: 'chef-1', customerName: 'Priya M.', rating: 5, text: 'Best biryani in Brampton! Tastes exactly like my ammamma\'s cooking.', date: futureDate(-5) },
+      { id: 'r1-2', chefId: 'chef-1', customerName: 'Ravi K.', rating: 5, text: 'Gongura mutton was absolutely amazing. Will order again!', date: futureDate(-3) },
+      { id: 'r1-3', chefId: 'chef-1', customerName: 'Sneha T.', rating: 4, text: 'Great food, generous portions. Chicken 65 was a bit too spicy for me though.', date: futureDate(-1) },
+    ],
+    plannedMeals: [
+      { id: 'pm-1', chefId: 'chef-1', name: 'Sunday Hyderabadi Biryani Feast', description: 'Special dum biryani with raita, mirchi ka salan & gulab jamun', image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=400&h=250&fit=crop', price: 22.99, date: futureDate(1), timeSlot: 'lunch', maxOrders: 15, currentOrders: 9, allergens: ['dairy', 'nuts'], isVegetarian: false, isLimitedDrop: false },
+      { id: 'pm-2', chefId: 'chef-1', name: 'Telugu Thali Special', description: 'Rice, sambar, rasam, 2 curries, podi, papad & sweet', image: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&h=250&fit=crop', price: 18.99, date: futureDate(3), timeSlot: 'dinner', maxOrders: 10, currentOrders: 3, allergens: ['dairy'], isVegetarian: true, isLimitedDrop: false },
+    ],
+    weeklyPlan: { id: 'wp-1', chefId: 'chef-1', mealsPerWeek: 5, pricePerMeal: 13.99, description: 'Amma\'s Weekly Telugu Thali — authentic home-cooked Telugu meals Mon-Fri', dietaryOptions: ['Vegetarian', 'Non-Vegetarian', 'Egg-Free'] },
   },
   {
     id: 'chef-2',
@@ -39,11 +68,20 @@ export const chefs: Chef[] = [
       { id: 'm2-1', name: 'Masala Dosa', price: 9.99, description: 'Crispy fermented crepe filled with spiced potato masala', allergens: [], isVeg: true },
       { id: 'm2-2', name: 'Idli Sambar (4 pcs)', price: 7.99, description: 'Fluffy steamed rice cakes with aromatic lentil sambar', allergens: [], isVeg: true },
       { id: 'm2-3', name: 'Medu Vada (3 pcs)', price: 6.99, description: 'Crispy urad dal fritters with coconut chutney', allergens: [], isVeg: true },
-      { id: 'm2-4', name: 'Chettinad Chicken Curry', price: 15.99, description: 'Fiery chicken curry with freshly ground Chettinad spices', allergens: [], isVeg: false },
+      { id: 'm2-4', name: 'Chettinad Chicken Curry', price: 15.99, description: 'Fiery chicken curry with freshly ground Chettinad spices', allergens: [], isVeg: false, modifiers: [
+        { id: 'mod-spice', name: 'Spice Level', options: [{ label: 'Mild', priceAdjustment: 0 }, { label: 'Medium', priceAdjustment: 0 }, { label: 'Hot', priceAdjustment: 0 }] },
+      ]},
       { id: 'm2-5', name: 'Upma', price: 6.99, description: 'Savory semolina porridge with vegetables and cashews', allergens: ['gluten', 'nuts'], isVeg: true },
       { id: 'm2-6', name: 'Filter Coffee (2 cups)', price: 4.99, description: 'Traditional South Indian filter coffee with fresh milk', allergens: ['dairy'], isVeg: true },
       { id: 'm2-7', name: 'Pongal', price: 8.49, description: 'Creamy rice and lentil dish tempered with pepper and cumin', allergens: ['dairy'], isVeg: true },
       { id: 'm2-8', name: 'Rasam Rice', price: 7.99, description: 'Tangy pepper-tomato soup served with steamed rice', allergens: [], isVeg: true },
+    ],
+    reviews: [
+      { id: 'r2-1', chefId: 'chef-2', customerName: 'Arun S.', rating: 5, text: 'The dosas are crispy perfection! Better than any restaurant.', date: futureDate(-7) },
+      { id: 'r2-2', chefId: 'chef-2', customerName: 'Lakshmi V.', rating: 5, text: 'Filter coffee reminded me of Chennai mornings. So authentic!', date: futureDate(-2) },
+    ],
+    plannedMeals: [
+      { id: 'pm-3', chefId: 'chef-2', name: 'Tamil Nadu Breakfast Box', description: 'Idli, vada, dosa, sambar, 3 chutneys & filter coffee', image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=400&h=250&fit=crop', price: 14.99, date: futureDate(2), timeSlot: 'lunch', maxOrders: 20, currentOrders: 12, allergens: ['dairy'], isVegetarian: true, isLimitedDrop: false },
     ],
   },
   {
@@ -66,6 +104,15 @@ export const chefs: Chef[] = [
       { id: 'm3-5', name: 'Avial', price: 9.99, description: 'Mixed vegetables in coconut-yogurt gravy', allergens: ['dairy'], isVeg: true },
       { id: 'm3-6', name: 'Payasam', price: 6.99, description: 'Rich vermicelli kheer with cashews and raisins', allergens: ['dairy', 'nuts', 'gluten'], isVeg: true },
     ],
+    reviews: [
+      { id: 'r3-1', chefId: 'chef-3', customerName: 'Deepa R.', rating: 5, text: 'Kerala sadya was incredible. Each dish was perfect!', date: futureDate(-4) },
+      { id: 'r3-2', chefId: 'chef-3', customerName: 'Thomas J.', rating: 4, text: 'Beef fry was excellent. Appam could be a bit softer.', date: futureDate(-2) },
+    ],
+    plannedMeals: [
+      { id: 'pm-4', chefId: 'chef-3', name: 'Kerala Sadya Lunch', description: 'Full Onam-style sadya with 12 dishes on banana leaf', image: 'https://images.unsplash.com/photo-1567337710282-00832b415979?w=400&h=250&fit=crop', price: 24.99, date: futureDate(2), timeSlot: 'lunch', maxOrders: 8, currentOrders: 6, allergens: ['dairy', 'nuts'], isVegetarian: true, isLimitedDrop: true, dropExpiresAt: futureDateTime(1, 20) },
+      { id: 'pm-5', chefId: 'chef-3', name: 'Malabar Seafood Night', description: 'Fish curry, prawn fry, crab roast with appam & rice', image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=250&fit=crop', price: 28.99, date: futureDate(4), timeSlot: 'dinner', maxOrders: 6, currentOrders: 1, allergens: ['shellfish'], isVegetarian: false, isLimitedDrop: false },
+    ],
+    weeklyPlan: { id: 'wp-2', chefId: 'chef-3', mealsPerWeek: 5, pricePerMeal: 14.99, description: 'Kerala Weekly Feast — fresh coconut-based meals with rotating seafood & veg options', dietaryOptions: ['Vegetarian', 'Seafood', 'Non-Vegetarian'] },
   },
   {
     id: 'chef-4',
@@ -81,13 +128,30 @@ export const chefs: Chef[] = [
     imageUrl: 'https://images.unsplash.com/photo-1581299894007-aaa50297cf16?w=400&h=250&fit=crop',
     menuItems: [
       { id: 'm4-1', name: 'Chole Bhature', price: 11.99, description: 'Spiced chickpea curry with fluffy deep-fried bread', allergens: ['gluten'], isVeg: true },
-      { id: 'm4-2', name: 'Paneer Butter Masala', price: 13.99, description: 'Creamy tomato gravy with soft paneer cubes', allergens: ['dairy', 'nuts'], isVeg: true },
+      { id: 'm4-2', name: 'Paneer Butter Masala', price: 13.99, description: 'Creamy tomato gravy with soft paneer cubes', allergens: ['dairy', 'nuts'], isVeg: true, modifiers: [
+        { id: 'mod-spice', name: 'Spice Level', options: [{ label: 'Mild', priceAdjustment: 0 }, { label: 'Medium', priceAdjustment: 0 }, { label: 'Hot', priceAdjustment: 0 }] },
+        { id: 'mod-addon', name: 'Add-on', options: [{ label: 'Extra Naan (2 pcs)', priceAdjustment: 3.99 }, { label: 'Extra Rice', priceAdjustment: 2.99 }, { label: 'Raita', priceAdjustment: 1.99 }] },
+      ]},
       { id: 'm4-3', name: 'Rajma Chawal', price: 10.99, description: 'Kidney bean curry served over basmati rice — pure comfort', allergens: [], isVeg: true },
-      { id: 'm4-4', name: 'Butter Chicken', price: 15.99, description: 'Tender chicken in rich, creamy tomato-butter sauce', allergens: ['dairy', 'nuts'], isVeg: false },
+      { id: 'm4-4', name: 'Butter Chicken', price: 15.99, description: 'Tender chicken in rich, creamy tomato-butter sauce', allergens: ['dairy', 'nuts'], isVeg: false, modifiers: [
+        { id: 'mod-spice', name: 'Spice Level', options: [{ label: 'Mild', priceAdjustment: 0 }, { label: 'Medium', priceAdjustment: 0 }, { label: 'Hot', priceAdjustment: 0 }] },
+        { id: 'mod-portion', name: 'Portion Size', options: [{ label: 'Regular', priceAdjustment: 0 }, { label: 'Family (4 servings)', priceAdjustment: 14.00 }] },
+      ]},
       { id: 'm4-5', name: 'Dal Makhani', price: 11.99, description: 'Slow-cooked black lentils with butter and cream', allergens: ['dairy'], isVeg: true },
       { id: 'm4-6', name: 'Tandoori Roti (4 pcs)', price: 4.99, description: 'Fresh whole wheat flatbread from the tandoor', allergens: ['gluten'], isVeg: true },
       { id: 'm4-7', name: 'Lassi (Sweet/Salt)', price: 3.99, description: 'Creamy yogurt drink, choose sweet or salted', allergens: ['dairy'], isVeg: true },
     ],
+    reviews: [
+      { id: 'r4-1', chefId: 'chef-4', customerName: 'Gurpreet S.', rating: 5, text: 'Butter chicken is the best I\'ve had in Canada. Period.', date: futureDate(-6) },
+      { id: 'r4-2', chefId: 'chef-4', customerName: 'Amit P.', rating: 5, text: 'Chole bhature reminded me of Delhi street food. Incredible!', date: futureDate(-3) },
+      { id: 'r4-3', chefId: 'chef-4', customerName: 'Meena R.', rating: 4, text: 'Very good dal makhani. Would love bigger portions!', date: futureDate(-1) },
+      { id: 'r4-4', chefId: 'chef-4', customerName: 'Rahul D.', rating: 5, text: 'Family pack butter chicken fed all 4 of us. Amazing value!', date: futureDate(-1) },
+    ],
+    plannedMeals: [
+      { id: 'pm-6', chefId: 'chef-4', name: 'Punjabi Thali Night', description: 'Dal makhani, butter chicken, paneer, naan, rice, raita & kheer', image: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&h=250&fit=crop', price: 21.99, date: futureDate(1), timeSlot: 'dinner', maxOrders: 20, currentOrders: 14, allergens: ['dairy', 'nuts', 'gluten'], isVegetarian: false, isLimitedDrop: false },
+      { id: 'pm-7', chefId: 'chef-4', name: 'Weekend Chole Bhature Brunch', description: 'Chole bhature with pickled onion, lassi & gulab jamun — only 12 plates!', image: 'https://images.unsplash.com/photo-1606491956689-2ea866880049?w=400&h=250&fit=crop', price: 15.99, date: futureDate(3), timeSlot: 'lunch', maxOrders: 12, currentOrders: 8, allergens: ['gluten', 'dairy'], isVegetarian: true, isLimitedDrop: true, dropExpiresAt: futureDateTime(2, 18) },
+    ],
+    weeklyPlan: { id: 'wp-3', chefId: 'chef-4', mealsPerWeek: 7, pricePerMeal: 12.99, description: 'Harsha\'s Punjabi Weekly — daily rotis, dal & sabzi with weekend specials', dietaryOptions: ['Vegetarian', 'Non-Vegetarian', 'Jain'] },
   },
   {
     id: 'chef-5',
@@ -109,6 +173,13 @@ export const chefs: Chef[] = [
       { id: 'm5-5', name: 'Gujarati Dal', price: 8.49, description: 'Sweet and tangy lentil soup with jaggery and lemon', allergens: [], isVeg: true },
       { id: 'm5-6', name: 'Shrikhand', price: 5.99, description: 'Sweetened strained yogurt with saffron and cardamom', allergens: ['dairy', 'nuts'], isVeg: true },
     ],
+    reviews: [
+      { id: 'r5-1', chefId: 'chef-5', customerName: 'Nisha B.', rating: 5, text: 'Best Gujarati food outside Gujarat! Dhokla was so soft and fluffy.', date: futureDate(-8) },
+      { id: 'r5-2', chefId: 'chef-5', customerName: 'Jignesh P.', rating: 4, text: 'Undhiyu was delicious but wish there were more options.', date: futureDate(-3) },
+    ],
+    plannedMeals: [
+      { id: 'pm-8', chefId: 'chef-5', name: 'Gujarati Festival Thali', description: 'Complete Gujarati thali with undhiyu, puris, dal, kadhi, rice, pickles & shrikhand', image: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&h=250&fit=crop', price: 19.99, date: futureDate(5), timeSlot: 'dinner', maxOrders: 10, currentOrders: 2, allergens: ['dairy', 'gluten'], isVegetarian: true, isLimitedDrop: false },
+    ],
   },
   {
     id: 'chef-6',
@@ -123,12 +194,22 @@ export const chefs: Chef[] = [
     dailyCapacity: 5,
     imageUrl: 'https://images.unsplash.com/photo-1542010589005-d1eacc3918f2?w=400&h=250&fit=crop',
     menuItems: [
-      { id: 'm6-1', name: 'Hyderabadi Mutton Biryani', price: 19.99, description: 'Royal dum biryani with tender mutton, saffron, and fried onions', allergens: ['dairy', 'nuts'], isVeg: false },
+      { id: 'm6-1', name: 'Hyderabadi Mutton Biryani', price: 19.99, description: 'Royal dum biryani with tender mutton, saffron, and fried onions', allergens: ['dairy', 'nuts'], isVeg: false, modifiers: [
+        { id: 'mod-portion', name: 'Portion Size', options: [{ label: 'Regular', priceAdjustment: 0 }, { label: 'Family (4 servings)', priceAdjustment: 18.00 }] },
+      ]},
       { id: 'm6-2', name: 'Haleem', price: 15.99, description: 'Slow-cooked wheat and meat stew, garnished with crispy onions', allergens: ['gluten', 'nuts'], isVeg: false },
       { id: 'm6-3', name: 'Mirchi Ka Salan', price: 10.99, description: 'Green chillies in tangy peanut-sesame gravy', allergens: ['nuts'], isVeg: true },
       { id: 'm6-4', name: 'Double Ka Meetha', price: 8.99, description: 'Fried bread slices soaked in sweet saffron milk', allergens: ['dairy', 'gluten', 'nuts'], isVeg: true },
       { id: 'm6-5', name: 'Lukhmi (4 pcs)', price: 9.99, description: 'Crispy pastry pockets stuffed with spiced keema', allergens: ['gluten'], isVeg: false },
       { id: 'm6-6', name: 'Hyderabadi Veg Biryani', price: 14.99, description: 'Fragrant layered rice with seasonal vegetables and dum spices', allergens: ['dairy', 'nuts'], isVeg: true },
+    ],
+    reviews: [
+      { id: 'r6-1', chefId: 'chef-6', customerName: 'Faraz A.', rating: 5, text: 'This is THE biryani in Mississauga. Mutton melts in your mouth.', date: futureDate(-5) },
+      { id: 'r6-2', chefId: 'chef-6', customerName: 'Sana K.', rating: 5, text: 'Haleem was restaurant-quality. So good for a cold Canadian winter!', date: futureDate(-2) },
+      { id: 'r6-3', chefId: 'chef-6', customerName: 'Vikram S.', rating: 4, text: 'Great biryani! Family pack could use more raita.', date: futureDate(-1) },
+    ],
+    plannedMeals: [
+      { id: 'pm-9', chefId: 'chef-6', name: 'Royal Hyderabadi Feast', description: 'Mutton biryani, haleem, mirchi ka salan, double ka meetha — limited 8 feasts!', image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=400&h=250&fit=crop', price: 32.99, date: futureDate(2), timeSlot: 'dinner', maxOrders: 8, currentOrders: 7, allergens: ['dairy', 'nuts', 'gluten'], isVegetarian: false, isLimitedDrop: true, dropExpiresAt: futureDateTime(1, 22) },
     ],
   },
   {
@@ -152,6 +233,13 @@ export const chefs: Chef[] = [
       { id: 'm7-6', name: 'Sandesh (4 pcs)', price: 6.99, description: 'Delicate fresh cheese sweets flavored with cardamom', allergens: ['dairy'], isVeg: true },
       { id: 'm7-7', name: 'Begun Bhaja', price: 5.99, description: 'Crispy fried eggplant slices with Bengali spices', allergens: [], isVeg: true },
     ],
+    reviews: [
+      { id: 'r7-1', chefId: 'chef-7', customerName: 'Saurav G.', rating: 5, text: 'Kosha mangsho was out of this world! Pure nostalgia.', date: futureDate(-6) },
+      { id: 'r7-2', chefId: 'chef-7', customerName: 'Ananya D.', rating: 4, text: 'Mishti doi was creamy and perfect. Luchi could be crispier.', date: futureDate(-2) },
+    ],
+    plannedMeals: [
+      { id: 'pm-10', chefId: 'chef-7', name: 'Bengali Fish Feast', description: 'Shorshe ilish, fish fry, begun bhaja, rice, dal & mishti doi', image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=250&fit=crop', price: 26.99, date: futureDate(3), timeSlot: 'dinner', maxOrders: 6, currentOrders: 2, allergens: [], isVegetarian: false, isLimitedDrop: false },
+    ],
   },
   {
     id: 'chef-8',
@@ -168,11 +256,20 @@ export const chefs: Chef[] = [
     menuItems: [
       { id: 'm8-1', name: 'Veg Manchurian', price: 11.99, description: 'Crispy vegetable balls in tangy manchurian sauce', allergens: ['gluten', 'soy'], isVeg: true },
       { id: 'm8-2', name: 'Chicken Manchurian', price: 13.99, description: 'Crispy chicken in spicy Indo-Chinese gravy', allergens: ['gluten', 'soy', 'eggs'], isVeg: false },
-      { id: 'm8-3', name: 'Hakka Noodles', price: 10.99, description: 'Stir-fried noodles with vegetables and Indo-Chinese sauces', allergens: ['gluten', 'soy'], isVeg: true },
+      { id: 'm8-3', name: 'Hakka Noodles', price: 10.99, description: 'Stir-fried noodles with vegetables and Indo-Chinese sauces', allergens: ['gluten', 'soy'], isVeg: true, modifiers: [
+        { id: 'mod-protein', name: 'Add Protein', options: [{ label: 'No protein (Veg)', priceAdjustment: 0 }, { label: 'Add Chicken', priceAdjustment: 3.99 }, { label: 'Add Paneer', priceAdjustment: 2.99 }] },
+      ]},
       { id: 'm8-4', name: 'Chilli Paneer', price: 12.99, description: 'Crispy paneer tossed with peppers in chilli sauce', allergens: ['dairy', 'soy'], isVeg: true },
       { id: 'm8-5', name: 'Fried Rice', price: 9.99, description: 'Wok-tossed rice with vegetables and soy sauce', allergens: ['soy'], isVeg: true },
       { id: 'm8-6', name: 'Manchow Soup', price: 6.99, description: 'Spicy vegetable soup topped with crispy noodles', allergens: ['gluten', 'soy'], isVeg: true },
       { id: 'm8-7', name: 'Honey Chilli Potato', price: 9.99, description: 'Crispy potato fingers glazed in honey chilli sauce', allergens: ['gluten'], isVeg: true },
+    ],
+    reviews: [
+      { id: 'r8-1', chefId: 'chef-8', customerName: 'Karan M.', rating: 4, text: 'Hakka noodles are addictive! Great portion sizes for the price.', date: futureDate(-4) },
+      { id: 'r8-2', chefId: 'chef-8', customerName: 'Pooja L.', rating: 5, text: 'Chilli paneer was crispy and saucy. Just like back home!', date: futureDate(-1) },
+    ],
+    plannedMeals: [
+      { id: 'pm-11', chefId: 'chef-8', name: 'Indo-Chinese Party Box', description: 'Hakka noodles, fried rice, manchurian, chilli paneer, honey chilli potato — feeds 4!', image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=250&fit=crop', price: 35.99, date: futureDate(1), timeSlot: 'dinner', maxOrders: 10, currentOrders: 4, allergens: ['gluten', 'soy', 'dairy'], isVegetarian: true, isLimitedDrop: false },
     ],
   },
   {
@@ -195,6 +292,10 @@ export const chefs: Chef[] = [
       { id: 'm9-5', name: 'Bhel Puri', price: 6.49, description: 'Puffed rice tossed with chutneys, onions, and sev', allergens: ['gluten'], isVeg: true },
       { id: 'm9-6', name: 'Papdi Chaat', price: 7.99, description: 'Crispy wafers with potatoes, chickpeas, and chutneys', allergens: ['gluten', 'dairy'], isVeg: true },
     ],
+    reviews: [
+      { id: 'r9-1', chefId: 'chef-9', customerName: 'Rohit V.', rating: 5, text: 'Pani puri kit is genius! Had a pani puri party at home.', date: futureDate(-5) },
+      { id: 'r9-2', chefId: 'chef-9', customerName: 'Divya S.', rating: 4, text: 'Samosas were crispy and well-spiced. Great for quick snacks!', date: futureDate(-2) },
+    ],
   },
   {
     id: 'chef-10',
@@ -216,6 +317,13 @@ export const chefs: Chef[] = [
       { id: 'm10-5', name: 'Mysore Bonda (6 pcs)', price: 7.49, description: 'Crispy deep-fried dumplings with coconut chutney', allergens: [], isVeg: true },
       { id: 'm10-6', name: 'Rava Kesari', price: 5.99, description: 'Sweet semolina halwa with ghee, cashews, and saffron', allergens: ['dairy', 'gluten', 'nuts'], isVeg: true },
       { id: 'm10-7', name: 'Malabar Parotta (3 pcs)', price: 5.99, description: 'Flaky layered flatbread, perfect with any curry', allergens: ['gluten'], isVeg: true },
+    ],
+    reviews: [
+      { id: 'r10-1', chefId: 'chef-10', customerName: 'Varun N.', rating: 5, text: 'Ghee roast dosa is to die for! Perfectly crispy every time.', date: futureDate(-3) },
+      { id: 'r10-2', chefId: 'chef-10', customerName: 'Swathi R.', rating: 5, text: 'Coconut chicken curry is comfort food at its best. So fresh!', date: futureDate(-1) },
+    ],
+    plannedMeals: [
+      { id: 'pm-12', chefId: 'chef-10', name: 'South Indian Sunday Brunch', description: 'Ghee roast dosa, idli, vada, uttapam, sambar, chutneys & filter coffee', image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=400&h=250&fit=crop', price: 16.99, date: futureDate(1), timeSlot: 'lunch', maxOrders: 12, currentOrders: 5, allergens: ['dairy'], isVegetarian: true, isLimitedDrop: false },
     ],
   },
 ];
