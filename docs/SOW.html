@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GharKaChef — Statement of Work</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --primary: #FF6B35;
+    --primary-light: #FFF5F0;
+    --secondary: #2EC4B6;
+    --dark: #1A1A2E;
+    --text: #333355;
+    --text-light: #666688;
+    --border: #E8E8F0;
+    --bg: #FAFAFE;
+    --white: #FFFFFF;
+    --success: #2EC4B6;
+    --warning: #FFB627;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Cover Page */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #1A1A2E 0%, #2D2D4E 50%, #1A1A2E 100%);
+    color: white;
+    text-align: center;
+    padding: 60px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 70%, rgba(255,107,53,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(46,196,182,0.06) 0%, transparent 50%);
+    animation: float 20s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-2%, 2%); }
+  }
+
+  .cover-content { position: relative; z-index: 1; max-width: 700px; }
+
+  .cover-badge {
+    display: inline-block;
+    background: rgba(255,107,53,0.15);
+    border: 1px solid rgba(255,107,53,0.3);
+    color: var(--primary);
+    padding: 6px 20px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .cover h1 {
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #FF6B35, #FF8F65);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .cover h2 {
+    font-size: 22px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 48px;
+  }
+
+  .cover-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    text-align: left;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .cover-meta-item { }
+  .cover-meta-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+  .cover-meta-value { font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.9); }
+
+  /* Main Content */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 56px;
+    page-break-inside: avoid;
+  }
+
+  .section-number {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    text-align: center;
+    line-height: 32px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  h2.section-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+
+  .section-subtitle {
+    font-size: 15px;
+    color: var(--text-light);
+    margin-bottom: 28px;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--dark);
+    margin: 28px 0 12px;
+  }
+
+  p {
+    margin-bottom: 16px;
+    font-size: 15px;
+    color: var(--text);
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+
+  thead th {
+    background: var(--dark);
+    color: white;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  thead th:first-child { border-radius: 8px 0 0 0; }
+  thead th:last-child { border-radius: 0 8px 0 0; }
+
+  tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  tbody tr:hover { background: rgba(255,107,53,0.03); }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:last-child td:first-child { border-radius: 0 0 0 8px; }
+  tbody tr:last-child td:last-child { border-radius: 0 0 8px 0; }
+
+  table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+
+  /* Status badges */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .badge-done { background: rgba(46,196,182,0.12); color: #1a9e93; }
+  .badge-phase1 { background: rgba(255,107,53,0.12); color: #e05a25; }
+  .badge-phase2 { background: rgba(100,100,200,0.12); color: #5555aa; }
+  .badge-phase3 { background: rgba(255,182,39,0.12); color: #cc8800; }
+
+  /* Cards */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .card h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 6px;
+  }
+
+  .card p {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 0;
+    line-height: 1.5;
+  }
+
+  /* Highlight box */
+  .highlight {
+    background: var(--primary-light);
+    border-left: 4px solid var(--primary);
+    border-radius: 0 8px 8px 0;
+    padding: 20px 24px;
+    margin: 24px 0;
+  }
+
+  .highlight p { margin-bottom: 0; }
+  .highlight strong { color: var(--dark); }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 40px;
+    margin: 24px 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 28px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -29px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 3px solid var(--primary-light);
+  }
+
+  .timeline-item.done::before { background: var(--success); border-color: rgba(46,196,182,0.2); }
+
+  .timeline-phase {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--primary);
+    margin-bottom: 4px;
+  }
+
+  .timeline-item.done .timeline-phase { color: var(--success); }
+
+  .timeline-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 4px;
+  }
+
+  .timeline-desc {
+    font-size: 13px;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+
+  .timeline-duration {
+    display: inline-block;
+    background: rgba(255,107,53,0.08);
+    color: var(--primary);
+    padding: 2px 10px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+
+  .timeline-item.done .timeline-duration {
+    background: rgba(46,196,182,0.08);
+    color: var(--success);
+  }
+
+  /* Cost table */
+  .cost-total {
+    background: var(--dark);
+    color: white;
+  }
+  .cost-total td {
+    font-weight: 700;
+    font-size: 16px;
+    border-bottom: none;
+  }
+
+  /* Divider */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+
+  /* Lists */
+  ul { padding-left: 20px; margin: 12px 0; }
+  li { margin-bottom: 8px; font-size: 14px; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-light);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+  }
+
+  /* Signature */
+  .signature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    margin: 40px 0;
+  }
+
+  .signature-block {
+    border-top: 2px solid var(--dark);
+    padding-top: 16px;
+  }
+
+  .signature-label { font-size: 12px; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; }
+  .signature-line { margin-top: 48px; border-top: 1px solid var(--border); padding-top: 8px; }
+  .signature-name { font-size: 14px; font-weight: 600; color: var(--dark); }
+
+  /* Print styles */
+  @media print {
+    body { background: white; }
+    .cover { min-height: auto; padding: 80px 40px; page-break-after: always; }
+    .section { page-break-inside: avoid; }
+    .container { padding: 40px; }
+  }
+
+  @media (max-width: 700px) {
+    .cover h1 { font-size: 36px; }
+    .cover h2 { font-size: 18px; }
+    .cover-meta { grid-template-columns: 1fr; }
+    .card-grid { grid-template-columns: 1fr; }
+    .signature-grid { grid-template-columns: 1fr; }
+    .container { padding: 32px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <div class="cover-content">
+    <div class="cover-badge">Statement of Work</div>
+    <h1>GharKaChef</h1>
+    <h2>Verified Home Chefs Marketplace Platform</h2>
+
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Prepared By</div>
+        <div class="cover-meta-value">Brundala Labs</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Date</div>
+        <div class="cover-meta-value">February 18, 2026</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Document Version</div>
+        <div class="cover-meta-value">2.0</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Status</div>
+        <div class="cover-meta-value">Phase 1 Complete</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+
+  <!-- 1. OVERVIEW -->
+  <div class="section">
+    <div class="section-number">1</div>
+    <h2 class="section-title">Project Overview</h2>
+    <p class="section-subtitle">What we're building and why it matters</p>
+
+    <p>GharKaChef is a <strong>two-sided marketplace</strong> connecting verified home chefs with customers seeking authentic, home-cooked Indian meals across Canada. The platform combines <strong>two proven business models</strong> under one roof — giving customers the flexibility to order on-demand or plan ahead, while giving chefs maximum control over their kitchen operations.</p>
+
+    <div class="highlight">
+      <p><strong>Core Value Proposition:</strong> Unlike restaurants, GharKaChef offers <em>ghar ka taste</em> (home taste) — authentic regional Indian cuisine cooked in verified home kitchens, with full transparency on allergens, dietary options, and chef credentials.</p>
+    </div>
+
+    <h3>Two Business Models, One Platform</h3>
+
+    <div class="card-grid">
+      <div class="card" style="border-left: 4px solid var(--primary);">
+        <div class="card-icon">⚡</div>
+        <h4>Order Now — The Uber Model</h4>
+        <p>On-demand ordering. Chefs toggle <strong>online/offline</strong> like Uber drivers. Customers browse available chefs, pick from their live menu, and order with a <strong>4-8 hour prep window</strong>. Chefs accept/decline, cook, and mark ready. Customers pick up at the scheduled time slot.</p>
+        <ul style="margin-top: 10px; font-size: 12px; color: var(--text-light);">
+          <li>Chef goes online → appears in browse</li>
+          <li>Customer orders → chef accepts in real-time</li>
+          <li>4h or 8h prep window with pickup slots</li>
+          <li>Daily capacity limits (like surge control)</li>
+          <li>Order status: Placed → Accepted → Cooking → Ready</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left: 4px solid var(--secondary);">
+        <div class="card-icon">📅</div>
+        <h4>Pre-Order — The Shef.com Model</h4>
+        <p>Planned meal marketplace. Chefs <strong>schedule meals days in advance</strong> — customers browse upcoming menus, pre-order before they're cooked, and subscribe to weekly plans. Limited drops create urgency with countdown timers and max order caps.</p>
+        <ul style="margin-top: 10px; font-size: 12px; color: var(--text-light);">
+          <li>Chef plans meals for future dates</li>
+          <li>Customers pre-order before cooking starts</li>
+          <li>Limited Drops with countdown timers</li>
+          <li>Max order limits (e.g., "only 12 plates!")</li>
+          <li>Weekly meal plan subscriptions</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 32px;">How They Compare</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 28%">Aspect</th>
+          <th>Order Now (Uber Model)</th>
+          <th>Pre-Order (Shef.com Model)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>When</strong></td>
+          <td>Same-day, 4-8 hours from now</td>
+          <td>Tomorrow, next week, scheduled dates</td>
+        </tr>
+        <tr>
+          <td><strong>Chef Control</strong></td>
+          <td>Toggle online/offline, accept/decline per order</td>
+          <td>Plan menu in advance, set max orders per meal</td>
+        </tr>
+        <tr>
+          <td><strong>Customer Behavior</strong></td>
+          <td>"I'm hungry, who's cooking today?"</td>
+          <td>"What's coming up this week? Let me plan."</td>
+        </tr>
+        <tr>
+          <td><strong>Supply Model</strong></td>
+          <td>Reactive — chef cooks when orders come in</td>
+          <td>Proactive — chef decides what to cook, customers opt in</td>
+        </tr>
+        <tr>
+          <td><strong>Urgency</strong></td>
+          <td>Real-time availability (online/offline)</td>
+          <td>Scarcity (limited drops, countdown, spots left)</td>
+        </tr>
+        <tr>
+          <td><strong>Recurring Revenue</strong></td>
+          <td>Per-order transactions</td>
+          <td>Weekly plan subscriptions + per-order</td>
+        </tr>
+        <tr>
+          <td><strong>Inspired By</strong></td>
+          <td>Uber, DoorDash</td>
+          <td>Shef.com, meal kit subscriptions</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="highlight" style="margin-top: 28px;">
+      <p><strong>Why both?</strong> The Uber model captures <em>impulse demand</em> ("I want biryani tonight"), while the Shef.com model builds <em>predictable revenue</em> through subscriptions and pre-orders. Chefs benefit from both — on-demand orders fill today's capacity, while planned meals guarantee tomorrow's income. Customers get the best of both worlds.</p>
+    </div>
+
+    <h3 style="margin-top: 32px;">Platform Pillars</h3>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">🍽</div>
+        <h4>10 Regional Cuisines</h4>
+        <p>Telugu, Tamil, Kerala, Punjabi, Gujarati, Hyderabadi, Bengali, Indo-Chinese, Chaat, and South Indian Fusion — authentic home-cooked meals, not restaurant food.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">✅</div>
+        <h4>Trust & Safety</h4>
+        <p>Three-tier verification: Health Permit, Inspected Kitchen, Food Handler certification. Allergen tags on every item. Veg/non-veg indicators. Star ratings and reviews.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔥</div>
+        <h4>Chef Empowerment</h4>
+        <p>Full control — go online when ready, plan meals ahead, set capacity limits, create limited drops. No mandatory hours, no restaurant overhead.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📱</div>
+        <h4>Cross-Platform</h4>
+        <p>One codebase runs on iOS, Android, and Web. Mobile-first glassmorphism UI. Deployed at gharkachef.vercel.app with state persistence.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- 2. SCOPE -->
+  <div class="section">
+    <div class="section-number">2</div>
+    <h2 class="section-title">Scope of Work</h2>
+    <p class="section-subtitle">Detailed breakdown of deliverables across all phases</p>
+
+    <h3>Phase 1 — Interactive Demo (Completed)</h3>
+    <p>A fully functional front-end demo deployed on web, demonstrating the complete user experience for both customers and chefs with mock data.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30%">Deliverable</th>
+          <th>Description</th>
+          <th style="width: 15%">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Role-Based Auth</strong></td>
+          <td>Welcome screen with Customer/Chef role selection, signup forms with cuisine picker, session persistence via localStorage</td>
+          <td><span class="badge badge-done">Complete</span></td>
+        </tr>
+        <tr>
+          <td><strong>Chef Browse & Search</strong></td>
+          <td>10 chef profiles with regional cuisines, search by name/cuisine, filter by prep time (4h/8h), verified status, online status</td>
+          <td><span class="badge badge-done">Complete</span></td>
+        </tr>
+        <tr>
+          <td><strong>Chef Details & Menu</strong></td>
+          <td>Chef profile with hero image, verified badges, star ratings, reviews. Menu with modifiers (spice level, portion size, add-ons), allergen tags, veg/non-veg indicators</td>
+          <td><span class="badge badge-done">Complete</span></td>
+        </tr>
+        <tr>
+          <td><strong>Cart & Order Flow</strong></td>
+          <td>Add-to-cart with quantity controls, pickup slot selection (auto-generated from prep window), customer details, order placement with confirmation modal</td>
+          <td><span class="badge badge-done">Complete</span></td>
+        </tr>
+        <tr>
+          <td><strong>Pre-Order System</strong></td>
+          <td>Dedicated tab with Limited Drops (countdown timer, max orders), Upcoming Meals carousel, Weekly Meal Plans with subscribe</td>
+          <td><span class="badge badge-done">Complete</span></td>
+        </tr>
+        <tr>
+          <td><strong>Chef Dashboard</strong></td>
+          <td>Online/offline toggle, prep window setting, daily capacity stepper, order management (Accept → Cooking → Ready), Plan a Meal form, planned meals list, reviews section</td>
+          <td><span class="badge badge-done">Complete</span></td>
+        </tr>
+        <tr>
+          <td><strong>Order History</strong></td>
+          <td>Customer view of past orders with status indicators</td>
+          <td><span class="badge badge-done">Complete</span></td>
+        </tr>
+        <tr>
+          <td><strong>Glassmorphism UI</strong></td>
+          <td>Frosted glass cards (backdrop-filter blur on web, expo-blur on native), gradient backgrounds, mobile-first 480px layout, emoji icons</td>
+          <td><span class="badge badge-done">Complete</span></td>
+        </tr>
+        <tr>
+          <td><strong>Web Deployment</strong></td>
+          <td>Static export via Expo, deployed on Vercel at gharkachef.vercel.app with custom CSS for mobile-first web experience</td>
+          <td><span class="badge badge-done">Complete</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Phase 2 — MVP (Production Backend)</h3>
+    <p>Add real authentication, database, and payment processing to make the platform functional for real users.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30%">Deliverable</th>
+          <th>Description</th>
+          <th style="width: 15%">Phase</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Backend API</strong></td>
+          <td>Node.js / Next.js API with RESTful endpoints for auth, chefs, menu, orders, planned meals, reviews</td>
+          <td><span class="badge badge-phase1">Phase 2</span></td>
+        </tr>
+        <tr>
+          <td><strong>Database</strong></td>
+          <td>PostgreSQL with Prisma ORM — chefs, menus, orders, users, reviews, planned meals, subscriptions</td>
+          <td><span class="badge badge-phase1">Phase 2</span></td>
+        </tr>
+        <tr>
+          <td><strong>Authentication</strong></td>
+          <td>JWT-based auth with phone OTP verification, role-based access control (customer / chef / admin)</td>
+          <td><span class="badge badge-phase1">Phase 2</span></td>
+        </tr>
+        <tr>
+          <td><strong>Payment Processing</strong></td>
+          <td>Stripe integration — customer payments, chef payouts, platform commission deduction</td>
+          <td><span class="badge badge-phase1">Phase 2</span></td>
+        </tr>
+        <tr>
+          <td><strong>Image Upload</strong></td>
+          <td>AWS S3 / Cloudinary for chef profile photos, menu item images, kitchen photos</td>
+          <td><span class="badge badge-phase1">Phase 2</span></td>
+        </tr>
+        <tr>
+          <td><strong>Push Notifications</strong></td>
+          <td>Order status updates (placed, accepted, cooking, ready) via Expo Push / FCM</td>
+          <td><span class="badge badge-phase1">Phase 2</span></td>
+        </tr>
+        <tr>
+          <td><strong>Geolocation</strong></td>
+          <td>Show chefs by proximity, distance calculation, map view</td>
+          <td><span class="badge badge-phase1">Phase 2</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Phase 3 — Growth Features</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30%">Deliverable</th>
+          <th>Description</th>
+          <th style="width: 15%">Phase</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Rating & Reviews</strong></td>
+          <td>Customer-submitted ratings with photos, verified purchase badges, chef response</td>
+          <td><span class="badge badge-phase2">Phase 3</span></td>
+        </tr>
+        <tr>
+          <td><strong>Delivery Integration</strong></td>
+          <td>Partner with local delivery services or in-app delivery assignment</td>
+          <td><span class="badge badge-phase2">Phase 3</span></td>
+        </tr>
+        <tr>
+          <td><strong>Chef Onboarding</strong></td>
+          <td>Self-service signup with document upload, admin verification workflow, badge issuance</td>
+          <td><span class="badge badge-phase2">Phase 3</span></td>
+        </tr>
+        <tr>
+          <td><strong>Admin Dashboard</strong></td>
+          <td>Web-based admin panel — manage chefs, orders, disputes, compliance, analytics</td>
+          <td><span class="badge badge-phase2">Phase 3</span></td>
+        </tr>
+        <tr>
+          <td><strong>Chef Earnings</strong></td>
+          <td>Daily/weekly/monthly earnings dashboard, payout history, tax documents</td>
+          <td><span class="badge badge-phase2">Phase 3</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Phase 4 — Scale</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30%">Deliverable</th>
+          <th>Description</th>
+          <th style="width: 15%">Phase</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Multi-City Launch</strong></td>
+          <td>Expand beyond GTA — Vancouver, Calgary, Ottawa, Edmonton</td>
+          <td><span class="badge badge-phase3">Phase 4</span></td>
+        </tr>
+        <tr>
+          <td><strong>Subscription Billing</strong></td>
+          <td>Recurring weekly meal plan billing with Stripe subscriptions</td>
+          <td><span class="badge badge-phase3">Phase 4</span></td>
+        </tr>
+        <tr>
+          <td><strong>Featured Listings</strong></td>
+          <td>Paid placement for chefs, promoted meal drops, sponsored search results</td>
+          <td><span class="badge badge-phase3">Phase 4</span></td>
+        </tr>
+        <tr>
+          <td><strong>Multi-Language</strong></td>
+          <td>Hindi, Punjabi, Telugu, Tamil language support with i18n</td>
+          <td><span class="badge badge-phase3">Phase 4</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <!-- 3. TECH STACK -->
+  <div class="section">
+    <div class="section-number">3</div>
+    <h2 class="section-title">Technology Stack</h2>
+    <p class="section-subtitle">Platform architecture and tools</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>Technology</th>
+          <th>Justification</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Mobile App</strong></td>
+          <td>React Native (Expo SDK 54)</td>
+          <td>Single codebase for iOS, Android, and Web. Fast iteration with Expo.</td>
+        </tr>
+        <tr>
+          <td><strong>Language</strong></td>
+          <td>TypeScript</td>
+          <td>Type safety, better IDE support, fewer runtime errors.</td>
+        </tr>
+        <tr>
+          <td><strong>Navigation</strong></td>
+          <td>React Navigation (Tabs + Stack)</td>
+          <td>Industry standard for React Native. Role-based conditional routing.</td>
+        </tr>
+        <tr>
+          <td><strong>State Management</strong></td>
+          <td>React Context + useReducer</td>
+          <td>Lightweight, no extra dependencies. 15 action types. localStorage persistence.</td>
+        </tr>
+        <tr>
+          <td><strong>UI Design</strong></td>
+          <td>Glassmorphism (backdrop-filter, expo-blur, gradients)</td>
+          <td>Modern, premium feel. Frosted glass cards with emoji icons.</td>
+        </tr>
+        <tr>
+          <td><strong>Backend (Phase 2)</strong></td>
+          <td>Node.js / Next.js API Routes</td>
+          <td>Full-stack JavaScript. Server-side rendering for web. API routes.</td>
+        </tr>
+        <tr>
+          <td><strong>Database (Phase 2)</strong></td>
+          <td>PostgreSQL + Prisma</td>
+          <td>Relational data (chefs, menus, orders). Type-safe ORM.</td>
+        </tr>
+        <tr>
+          <td><strong>Payments (Phase 2)</strong></td>
+          <td>Stripe</td>
+          <td>Industry standard. Supports marketplace payouts (Connect).</td>
+        </tr>
+        <tr>
+          <td><strong>Hosting</strong></td>
+          <td>Vercel (Web) + EAS (Mobile)</td>
+          <td>Zero-config deployment. Automatic preview URLs. CDN.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <!-- 4. SCREENS -->
+  <div class="section">
+    <div class="section-number">4</div>
+    <h2 class="section-title">Screen Inventory</h2>
+    <p class="section-subtitle">11 screens across authentication, customer, and chef flows</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Screen</th>
+          <th>Flow</th>
+          <th>Key Features</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>Welcome</strong></td>
+          <td>Auth</td>
+          <td>Role selection (Customer / Chef), Reset Demo Data button</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>Customer Signup</strong></td>
+          <td>Auth</td>
+          <td>Name, phone, dietary preference (vegetarian/non-veg/vegan)</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>Chef Signup</strong></td>
+          <td>Auth</td>
+          <td>Name, phone, cuisine type picker, kitchen description, food permit toggle</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>Browse Chefs</strong></td>
+          <td>Customer &gt; Home</td>
+          <td>Search bar, cuisine chips, filter chips (4h/8h/Verified/Online), chef cards with rating, distance, price level</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>Chef Details</strong></td>
+          <td>Customer &gt; Home</td>
+          <td>Hero image, verified badges, reviews, prep window toggle, menu with modifiers, allergen tags, sticky cart footer</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>Cart</strong></td>
+          <td>Customer &gt; Home</td>
+          <td>Item list with +/- quantity, total, pickup slot selector, customer details, place order, confirmation modal</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>Pre-Order</strong></td>
+          <td>Customer Tab</td>
+          <td>Limited Drops with countdown, Upcoming Meals carousel, Weekly Plans with subscribe</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><strong>Order History</strong></td>
+          <td>Customer Tab</td>
+          <td>List of past orders with order ID, items, total, status badge</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><strong>Profile</strong></td>
+          <td>Customer/Chef Tab</td>
+          <td>User info display, logout button</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><strong>Chef Dashboard</strong></td>
+          <td>Chef Tab</td>
+          <td>Online/offline toggle, prep window, capacity stepper, incoming orders with status workflow, Plan a Meal form, planned meals list, reviews</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><strong>Chef Profile</strong></td>
+          <td>Chef Tab</td>
+          <td>Chef account info, logout</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <!-- 5. TIMELINE -->
+  <div class="section">
+    <div class="section-number">5</div>
+    <h2 class="section-title">Project Timeline</h2>
+    <p class="section-subtitle">Phased delivery with clear milestones</p>
+
+    <div class="timeline">
+      <div class="timeline-item done">
+        <div class="timeline-phase">Phase 1 — Complete</div>
+        <div class="timeline-title">Interactive Demo</div>
+        <div class="timeline-desc">Full front-end with 11 screens, glassmorphism UI, role-based auth, pre-order system, chef dashboard. Deployed at gharkachef.vercel.app</div>
+        <div class="timeline-duration">Delivered February 2026</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-phase">Phase 2</div>
+        <div class="timeline-title">Production MVP</div>
+        <div class="timeline-desc">Backend API (Node.js/Next.js), PostgreSQL database, JWT authentication with phone OTP, Stripe payments, image uploads, push notifications, geolocation</div>
+        <div class="timeline-duration">8-10 weeks</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-phase">Phase 3</div>
+        <div class="timeline-title">Growth Features</div>
+        <div class="timeline-desc">Customer-submitted reviews with photos, delivery integration, chef onboarding workflow, admin dashboard, chef earnings dashboard</div>
+        <div class="timeline-duration">6-8 weeks</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-phase">Phase 4</div>
+        <div class="timeline-title">Scale & Expand</div>
+        <div class="timeline-desc">Multi-city expansion, subscription billing, featured listings, analytics, multi-language support</div>
+        <div class="timeline-duration">6-8 weeks</div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- 6. CUISINES -->
+  <div class="section">
+    <div class="section-number">6</div>
+    <h2 class="section-title">Regional Cuisine Coverage</h2>
+    <p class="section-subtitle">10 authentic Indian cuisines at launch</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Cuisine</th>
+          <th>Region</th>
+          <th>Signature Dishes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Telugu</strong></td><td>Andhra / Telangana</td><td>Biryani, Pulihora, Pesarattu, Chicken 65, Gongura Mutton</td></tr>
+        <tr><td><strong>Tamil</strong></td><td>Tamil Nadu</td><td>Masala Dosa, Idli Sambar, Chettinad Chicken, Filter Coffee</td></tr>
+        <tr><td><strong>Kerala</strong></td><td>Kerala</td><td>Fish Curry, Appam & Stew, Beef Fry, Puttu & Kadala</td></tr>
+        <tr><td><strong>Punjabi</strong></td><td>Punjab</td><td>Chole Bhature, Butter Chicken, Dal Makhani, Rajma Chawal</td></tr>
+        <tr><td><strong>Gujarati</strong></td><td>Gujarat</td><td>Undhiyu, Dhokla, Thepla, Khandvi, Shrikhand</td></tr>
+        <tr><td><strong>Hyderabadi</strong></td><td>Hyderabad</td><td>Mutton Biryani, Haleem, Mirchi Ka Salan, Lukhmi</td></tr>
+        <tr><td><strong>Bengali</strong></td><td>West Bengal</td><td>Kosha Mangsho, Shorshe Ilish, Mishti Doi, Sandesh</td></tr>
+        <tr><td><strong>Indo-Chinese</strong></td><td>Fusion</td><td>Manchurian, Hakka Noodles, Chilli Paneer, Fried Rice</td></tr>
+        <tr><td><strong>Chaat & Street Food</strong></td><td>North India</td><td>Pani Puri, Aloo Tikki, Samosa, Bhel Puri, Papdi Chaat</td></tr>
+        <tr><td><strong>South Indian Fusion</strong></td><td>South India</td><td>Ghee Roast Dosa, Coconut Chicken, Malabar Parotta</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <!-- 7. INVESTMENT -->
+  <div class="section">
+    <div class="section-number">7</div>
+    <h2 class="section-title">Investment Summary</h2>
+    <p class="section-subtitle">Phased investment aligned with milestones</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Phase</th>
+          <th>Scope</th>
+          <th>Duration</th>
+          <th style="text-align: right">Investment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-done">Complete</span></td>
+          <td><strong>Phase 1:</strong> Interactive Demo (11 screens, web deployment)</td>
+          <td>Delivered</td>
+          <td style="text-align: right">—</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-phase1">Phase 2</span></td>
+          <td><strong>MVP:</strong> Backend, database, auth, payments, notifications</td>
+          <td>8-10 weeks</td>
+          <td style="text-align: right">TBD</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-phase2">Phase 3</span></td>
+          <td><strong>Growth:</strong> Reviews, delivery, admin panel, chef earnings</td>
+          <td>6-8 weeks</td>
+          <td style="text-align: right">TBD</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-phase3">Phase 4</span></td>
+          <td><strong>Scale:</strong> Multi-city, subscriptions, featured listings, i18n</td>
+          <td>6-8 weeks</td>
+          <td style="text-align: right">TBD</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="highlight">
+      <p><strong>Note:</strong> Investment figures for Phases 2-4 will be finalized upon approval of this SOW and detailed sprint planning. Phase 1 demo is live at <a href="https://gharkachef.vercel.app" style="color: var(--primary)">gharkachef.vercel.app</a> for review.</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- 8. MONETIZATION -->
+  <div class="section">
+    <div class="section-number">8</div>
+    <h2 class="section-title">Revenue Model</h2>
+    <p class="section-subtitle">Multiple revenue streams for sustainable growth</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Revenue Stream</th>
+          <th>Model</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Platform Commission</strong></td>
+          <td>15-20% per order</td>
+          <td>Deducted from chef's earnings on each transaction</td>
+        </tr>
+        <tr>
+          <td><strong>Featured Listings</strong></td>
+          <td>Monthly fee</td>
+          <td>Chefs pay for top placement in browse and search results</td>
+        </tr>
+        <tr>
+          <td><strong>Delivery Fee</strong></td>
+          <td>Per delivery</td>
+          <td>Charged to customer when delivery option is added</td>
+        </tr>
+        <tr>
+          <td><strong>Customer Subscription</strong></td>
+          <td>Monthly pass</td>
+          <td>Free delivery, priority ordering, exclusive drops</td>
+        </tr>
+        <tr>
+          <td><strong>Chef Pro Tier</strong></td>
+          <td>Monthly subscription</td>
+          <td>Lower commission rate, analytics, priority support</td>
+        </tr>
+        <tr>
+          <td><strong>Weekly Plan Commission</strong></td>
+          <td>10% of subscription</td>
+          <td>Platform fee on recurring weekly meal plan subscriptions</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <!-- 9. ASSUMPTIONS -->
+  <div class="section">
+    <div class="section-number">9</div>
+    <h2 class="section-title">Assumptions & Dependencies</h2>
+    <p class="section-subtitle">Key assumptions for successful delivery</p>
+
+    <h3>Assumptions</h3>
+    <ul>
+      <li>Client will provide timely feedback within 3 business days of each deliverable</li>
+      <li>Content (chef profiles, menu items, food photography) will be sourced by the client for production</li>
+      <li>Stripe account setup and verification will be handled by the client</li>
+      <li>Apple Developer and Google Play Developer accounts will be provided for app store submissions</li>
+      <li>Domain and DNS management will be handled by the client</li>
+    </ul>
+
+    <h3>Dependencies</h3>
+    <ul>
+      <li>Stripe Connect approval for marketplace payouts (Phase 2)</li>
+      <li>Apple App Store and Google Play Store review processes (Phase 2)</li>
+      <li>Push notification certificate setup (Phase 2)</li>
+      <li>Delivery partner API availability (Phase 3)</li>
+    </ul>
+
+    <h3>Out of Scope</h3>
+    <ul>
+      <li>Food photography and content creation</li>
+      <li>Legal compliance review (food safety regulations per province)</li>
+      <li>Marketing and user acquisition</li>
+      <li>Ongoing content moderation (manual review of chef listings)</li>
+      <li>Customer support operations</li>
+    </ul>
+  </div>
+
+  <hr>
+
+  <!-- 10. ACCEPTANCE -->
+  <div class="section">
+    <div class="section-number">10</div>
+    <h2 class="section-title">Acceptance & Signatures</h2>
+    <p class="section-subtitle">Agreement to proceed with the scope defined above</p>
+
+    <p>By signing below, both parties agree to the scope of work, timeline, and terms outlined in this document. Phase 1 (Interactive Demo) has been delivered and is available for review at <a href="https://gharkachef.vercel.app" style="color: var(--primary)">gharkachef.vercel.app</a>.</p>
+
+    <div class="signature-grid">
+      <div class="signature-block">
+        <div class="signature-label">Client</div>
+        <div class="signature-line">
+          <div class="signature-name">Name: _________________________</div>
+          <br>
+          <div class="signature-name">Title: _________________________</div>
+          <br>
+          <div class="signature-name">Date: _________________________</div>
+          <br>
+          <div class="signature-name">Signature: _____________________</div>
+        </div>
+      </div>
+      <div class="signature-block">
+        <div class="signature-label">Brundala Labs</div>
+        <div class="signature-line">
+          <div class="signature-name">Name: _________________________</div>
+          <br>
+          <div class="signature-name">Title: _________________________</div>
+          <br>
+          <div class="signature-name">Date: _________________________</div>
+          <br>
+          <div class="signature-name">Signature: _____________________</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p><strong>GharKaChef</strong> — Statement of Work v2.0</p>
+    <p>Prepared by Brundala Labs &middot; February 2026</p>
+    <p style="margin-top: 8px; color: #aaa;">Confidential — For intended recipient only</p>
+  </div>
+
+</div>
+
+</body>
+</html>
