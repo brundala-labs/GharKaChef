@@ -30,7 +30,7 @@ const tabBarStyle = {
   shadowOffset: { width: 0, height: -2 },
   shadowOpacity: 0.1,
   shadowRadius: 4,
-  ...(Platform.OS === 'web' ? { height: 56, paddingBottom: 4, paddingTop: 4 } : {}),
+  ...(Platform.OS === 'web' ? { height: 56, paddingBottom: 4, paddingTop: 4, flexShrink: 0, flexGrow: 0 } : {}),
 };
 
 const tabBarLabelStyle = {

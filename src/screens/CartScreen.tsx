@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: spacing.xxl,
   },
-  modalCard: { width: '100%' },
+  modalCard: { width: '100%', maxWidth: 480 },
   modalContent: { padding: spacing.xxl, alignItems: 'center' },
   modalTitle: { ...typography.h1, marginTop: spacing.md, marginBottom: spacing.lg },
   modalRow: {

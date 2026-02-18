@@ -701,6 +701,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'flex-end',
+    alignItems: 'center',
   },
   modModalContent: {
     backgroundColor: colors.white,
@@ -708,6 +709,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius: radius.xl,
     padding: spacing.lg,
     maxHeight: '80%',
+    width: '100%',
+    maxWidth: 480,
   },
   modModalHeader: {
     flexDirection: 'row',
