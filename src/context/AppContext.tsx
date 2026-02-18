@@ -1,6 +1,27 @@
-import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
+import { Platform } from 'react-native';
 import { CartItem, Order, OrderStatus, Chef, PlannedMeal, Review, UserProfile } from '../types';
 import { chefs as initialChefs } from '../data/mock';
+
+const STORAGE_KEY = 'gharkachef_state';
+
+function saveState(state: AppState) {
+  try {
+    if (Platform.OS === 'web' && typeof localStorage !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+  } catch {}
+}
+
+function loadState(): AppState | null {
+  try {
+    if (Platform.OS === 'web' && typeof localStorage !== 'undefined') {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) return JSON.parse(saved);
+    }
+  } catch {}
+  return null;
+}
 
 interface AppState {
   cart: CartItem[];
@@ -182,7 +203,12 @@ interface AppContextValue {
 const AppContext = createContext<AppContextValue | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState, () => loadState() || initialState);
+
+  useEffect(() => {
+    saveState(state);
+  }, [state]);
+
   return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>;
 }
 
