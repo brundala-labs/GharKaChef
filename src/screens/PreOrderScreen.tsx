@@ -14,6 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useApp } from '../context/AppContext';
 import { GlassCard } from '../components/GlassCard';
 import { colors, spacing, radius, typography } from '../theme';
+import { LogoMark } from '../components/Logo';
 import { Chef, PlannedMeal } from '../types';
 
 function formatDate(dateStr: string) {
@@ -135,8 +136,13 @@ export function PreOrderScreen({ navigation }: any) {
   return (
     <LinearGradient colors={[...colors.background]} style={styles.container}>
       <ScrollView contentContainerStyle={styles.list} showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Pre-Order</Text>
-        <Text style={styles.subtitle}>Plan ahead — order meals before they're cooked</Text>
+        <View style={styles.headerRow}>
+          <LogoMark size={36} />
+          <View>
+            <Text style={styles.title}>Pre-Order</Text>
+            <Text style={styles.subtitle}>Plan ahead — order meals before they're cooked</Text>
+          </View>
+        </View>
 
         {/* Search */}
         <View style={styles.searchRow}>
@@ -324,8 +330,14 @@ export function PreOrderScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   list: { padding: spacing.lg, paddingBottom: 100 },
-  title: { ...typography.h1, marginBottom: spacing.xs },
-  subtitle: { ...typography.bodySmall, marginBottom: spacing.md },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+    marginBottom: spacing.md,
+  },
+  title: { ...typography.h1, marginBottom: 2 },
+  subtitle: { ...typography.bodySmall },
 
   searchRow: {
     flexDirection: 'row',

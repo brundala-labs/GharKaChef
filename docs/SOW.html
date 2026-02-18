@@ -63,7 +63,34 @@
     50% { transform: translate(-2%, 2%); }
   }
 
-  .cover-content { position: relative; z-index: 1; max-width: 700px; }
+  .cover-content {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cover-logo { margin-bottom: 28px; filter: drop-shadow(0 8px 24px rgba(255,107,53,0.3)); }
+
+  .cover-wordmark {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    margin-bottom: 8px;
+  }
+  .cover-wordmark .wm-ghar { font-size: 52px; font-weight: 800; color: #FFFFFF; letter-spacing: -1px; }
+  .cover-wordmark .wm-ka { font-size: 42px; font-weight: 300; color: rgba(255,255,255,0.5); }
+  .cover-wordmark .wm-chef {
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #FF6B35, #FF8F65);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 
   .cover-badge {
     display: inline-block;
@@ -79,22 +106,12 @@
     margin-bottom: 32px;
   }
 
-  .cover h1 {
-    font-size: 52px;
-    font-weight: 800;
-    letter-spacing: -1px;
-    margin-bottom: 8px;
-    background: linear-gradient(135deg, #FF6B35, #FF8F65);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
   .cover h2 {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 300;
-    color: rgba(255,255,255,0.7);
-    margin-bottom: 48px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 40px;
+    letter-spacing: 0.5px;
   }
 
   .cover-meta {
@@ -108,12 +125,30 @@
     border-radius: 16px;
     padding: 32px;
     max-width: 500px;
+    width: 100%;
     margin: 0 auto;
   }
 
   .cover-meta-item { }
   .cover-meta-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
   .cover-meta-value { font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.9); }
+
+  .cover-demo-link {
+    margin-top: 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,107,53,0.12);
+    border: 1px solid rgba(255,107,53,0.25);
+    color: var(--primary);
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .cover-demo-link:hover { background: rgba(255,107,53,0.2); }
 
   /* Main Content */
   .container {
@@ -398,8 +433,10 @@
   }
 
   @media (max-width: 700px) {
-    .cover h1 { font-size: 36px; }
-    .cover h2 { font-size: 18px; }
+    .cover-logo svg { width: 90px; height: 90px; }
+    .cover-wordmark .wm-ghar, .cover-wordmark .wm-chef { font-size: 36px; }
+    .cover-wordmark .wm-ka { font-size: 28px; }
+    .cover h2 { font-size: 16px; }
     .cover-meta { grid-template-columns: 1fr; }
     .card-grid { grid-template-columns: 1fr; }
     .signature-grid { grid-template-columns: 1fr; }
@@ -412,8 +449,56 @@
 <!-- COVER PAGE -->
 <div class="cover">
   <div class="cover-content">
+
+    <!-- SVG Logo -->
+    <div class="cover-logo">
+      <svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#FF8F65"/>
+            <stop offset="1" stop-color="#FF5722"/>
+          </linearGradient>
+          <linearGradient id="flameGrad" x1="0.5" y1="1" x2="0.5" y2="0">
+            <stop offset="0" stop-color="#FF6B35"/>
+            <stop offset="1" stop-color="#FFB627"/>
+          </linearGradient>
+        </defs>
+        <rect x="4" y="4" width="112" height="112" rx="28" fill="url(#bgGrad)"/>
+        <rect x="5" y="5" width="110" height="110" rx="27" fill="url(#bgGrad)"/>
+        <g transform="translate(60, 62)">
+          <!-- Chef hat -->
+          <circle cx="0" cy="-38" r="10" fill="white"/>
+          <circle cx="-9" cy="-33" r="8" fill="white"/>
+          <circle cx="9" cy="-33" r="8" fill="white"/>
+          <rect x="-12" y="-28" width="24" height="6" rx="2" fill="white"/>
+          <!-- House roof -->
+          <polygon points="0,-18 -28,6 28,6" fill="white"/>
+          <!-- House body -->
+          <rect x="-22" y="6" width="44" height="30" rx="3" fill="white"/>
+          <!-- Door -->
+          <rect x="-7" y="18" width="14" height="18" rx="7" fill="url(#bgGrad)"/>
+          <!-- Flame -->
+          <path d="M0 20 C-2 23 -5 25 -5 29 C-5 32 -3 34 0 34 C3 34 5 32 5 29 C5 25 2 23 0 20Z" fill="url(#flameGrad)"/>
+          <!-- Windows -->
+          <circle cx="-13" cy="14" r="4" fill="url(#bgGrad)"/>
+          <circle cx="13" cy="14" r="4" fill="url(#bgGrad)"/>
+          <!-- Window crosses -->
+          <rect x="-13.5" y="12.5" width="1" height="3" fill="white" opacity="0.6"/>
+          <rect x="-14.5" y="13.5" width="3" height="1" fill="white" opacity="0.6"/>
+          <rect x="12.5" y="12.5" width="1" height="3" fill="white" opacity="0.6"/>
+          <rect x="11.5" y="13.5" width="3" height="1" fill="white" opacity="0.6"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Wordmark -->
+    <div class="cover-wordmark">
+      <span class="wm-ghar">Ghar</span>
+      <span class="wm-ka">Ka</span>
+      <span class="wm-chef">Chef</span>
+    </div>
+
     <div class="cover-badge">Statement of Work</div>
-    <h1>GharKaChef</h1>
     <h2>Verified Home Chefs Marketplace Platform</h2>
 
     <div class="cover-meta">
@@ -434,6 +519,11 @@
         <div class="cover-meta-value">Phase 1 Complete</div>
       </div>
     </div>
+
+    <a href="https://gharkachef.vercel.app" target="_blank" class="cover-demo-link">
+      View Live Demo &rarr;
+    </a>
+
   </div>
 </div>
 
@@ -1148,6 +1238,11 @@
   </div>
 
   <div class="footer">
+    <svg width="36" height="36" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 12px; opacity: 0.6;">
+      <defs><linearGradient id="fGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF8F65"/><stop offset="1" stop-color="#FF5722"/></linearGradient></defs>
+      <rect x="4" y="4" width="112" height="112" rx="28" fill="url(#fGrad)"/>
+      <g transform="translate(60,62)"><circle cx="0" cy="-38" r="10" fill="white"/><circle cx="-9" cy="-33" r="8" fill="white"/><circle cx="9" cy="-33" r="8" fill="white"/><rect x="-12" y="-28" width="24" height="6" rx="2" fill="white"/><polygon points="0,-18 -28,6 28,6" fill="white"/><rect x="-22" y="6" width="44" height="30" rx="3" fill="white"/><rect x="-7" y="18" width="14" height="18" rx="7" fill="url(#fGrad)"/><circle cx="-13" cy="14" r="4" fill="url(#fGrad)"/><circle cx="13" cy="14" r="4" fill="url(#fGrad)"/></g>
+    </svg>
     <p><strong>GharKaChef</strong> — Statement of Work v2.0</p>
     <p>Prepared by Brundala Labs &middot; February 2026</p>
     <p style="margin-top: 8px; color: #aaa;">Confidential — For intended recipient only</p>

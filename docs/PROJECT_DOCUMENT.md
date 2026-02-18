@@ -116,7 +116,7 @@ The app supports two ordering modes:
 | K8 | Plan a Meal | Create planned meals for future dates with pricing | Done |
 | K9 | Limited Drops | Mark meals as limited-edition with max order count | Done |
 | K10 | Verified Badges | Display: Health Permit, Inspected Kitchen, Food Handler | Done |
-| K11 | Chef Picker (Demo) | Switch between demo chefs to manage different kitchens | Done |
+| K11 | Chef Identity | Dashboard shows logged-in chef's name and cuisine | Done |
 | K12 | Menu Management | Add/edit/remove menu items | Future |
 | K13 | Earnings Dashboard | View daily/weekly earnings | Future |
 
@@ -128,9 +128,11 @@ The app supports two ordering modes:
 | P2 | Mobile-First Web | 480px container with dark surround on desktop | Done |
 | P3 | Emoji Icons | Cross-platform icons without font dependencies | Done |
 | P4 | Reset Demo Data | Clear localStorage from Welcome screen | Done |
-| P5 | Payment Processing | Stripe integration | Future |
-| P6 | Real Backend | Node.js/Next.js API with PostgreSQL | Future |
-| P7 | Geolocation | Show chefs by proximity | Future |
+| P5 | SVG Logo | Custom brand logo (house + chef hat + flame) via react-native-svg | Done |
+| P6 | Back Navigation | Floating back buttons on ChefDetails and Cart screens | Done |
+| P7 | Payment Processing | Stripe integration | Future |
+| P8 | Real Backend | Node.js/Next.js API with PostgreSQL | Future |
+| P9 | Geolocation | Show chefs by proximity | Future |
 
 ---
 
@@ -497,16 +499,16 @@ State is managed via React Context + useReducer with 15 action types. On web, st
 
 | # | Screen | Location | Description |
 |---|---|---|---|
-| 1 | Welcome | Auth | Role selection: "Order Food" or "I'm a Chef" + Reset Demo Data |
+| 1 | Welcome | Auth | Logo + role selection: "Order Food" or "I'm a Chef" + Reset Demo Data |
 | 2 | Customer Signup | Auth | Name, phone, dietary preference |
 | 3 | Chef Signup | Auth | Name, phone, cuisine picker, kitchen description |
-| 4 | Browse | Customer > Home | Chef listing with search, cuisine chips, filter chips |
-| 5 | Chef Details | Customer > Home | Chef profile, badges, reviews, menu with modifiers, cart footer |
-| 6 | Cart | Customer > Home | Cart items, pickup slot selector, place order, confirmation modal |
+| 4 | Browse | Customer > Home | Logo mark, chef listing with search, cuisine chips, filter chips |
+| 5 | Chef Details | Customer > Home | Back button, chef profile, badges, reviews, menu with modifiers, cart footer |
+| 6 | Cart | Customer > Home | Back button, cart items, pickup slot selector, place order, confirmation modal |
 | 7 | Pre-Order | Customer Tab | Limited Drops (countdown), Upcoming Meals, Weekly Plans |
 | 8 | Order History | Customer Tab | List of past orders with status |
 | 9 | Profile | Customer/Chef Tab | User info + logout |
-| 10 | Chef Dashboard | Chef Tab | Online toggle, prep/capacity settings, orders, plan meals, reviews |
+| 10 | Chef Dashboard | Chef Tab | Chef identity banner, online toggle, prep/capacity settings, orders, plan meals, reviews |
 
 ---
 
@@ -598,8 +600,9 @@ AppProvider (React Context)
 | @react-navigation/* | Tab + stack navigation | Moderate |
 | react-native-screens | Native screen containers | Moderate |
 | react-native-safe-area-context | Safe area handling | Minimal |
+| react-native-svg | SVG logo rendering | Minimal |
 
-**Removed:** `@expo/vector-icons` (replaced with emoji, reduced bundle from 1.4MB to 909KB)
+**Removed:** `@expo/vector-icons` (replaced with emoji, reduced bundle size)
 
 ---
 
@@ -717,20 +720,22 @@ GharKaChef/
 │   ├── context/
 │   │   └── AppContext.tsx             # State: 15 actions, localStorage persistence
 │   ├── components/
-│   │   └── GlassCard.tsx             # Glassmorphism (backdrop-filter web, expo-blur native)
+│   │   ├── GlassCard.tsx             # Glassmorphism (backdrop-filter web, expo-blur native)
+│   │   └── Logo.tsx                  # SVG logo (Logo + LogoMark) via react-native-svg
 │   └── screens/
-│       ├── WelcomeScreen.tsx          # Role selection + Reset Demo Data
+│       ├── WelcomeScreen.tsx          # Role selection + Logo + Reset Demo Data
 │       ├── CustomerSignupScreen.tsx   # Customer registration
 │       ├── ChefSignupScreen.tsx       # Chef registration + cuisine picker
-│       ├── BrowseScreen.tsx           # Chef listing + search + filters
-│       ├── ChefDetailsScreen.tsx      # Chef profile + menu + modifiers + reviews
-│       ├── CartScreen.tsx             # Cart + pickup slot + place order
-│       ├── PreOrderScreen.tsx         # Limited Drops + Upcoming Meals + Weekly Plans
-│       ├── ChefModeScreen.tsx         # Chef dashboard + orders + plan meals
+│       ├── BrowseScreen.tsx           # Chef listing + search + filters + logo mark
+│       ├── ChefDetailsScreen.tsx      # Chef profile + menu + modifiers + reviews + back button
+│       ├── CartScreen.tsx             # Cart + pickup slot + place order + back button
+│       ├── PreOrderScreen.tsx         # Limited Drops + Upcoming Meals + Weekly Plans + logo mark
+│       ├── ChefModeScreen.tsx         # Chef dashboard + orders + plan meals (no chef picker)
 │       ├── OrderHistoryScreen.tsx     # Past orders
 │       └── ProfileScreen.tsx          # User profile + logout
 ├── docs/
-│   └── PROJECT_DOCUMENT.md           # This document
+│   ├── PROJECT_DOCUMENT.md           # This document
+│   └── SOW.html                      # Statement of Work (shareable HTML with logo)
 ├── dist/                             # Web build (deployed to Vercel)
 │   └── index.html                    # Custom CSS for mobile-first web layout
 ├── README.md                         # Quick start + demo script
@@ -753,9 +758,12 @@ GharKaChef/
 - [x] Chef: Plan a Meal with pricing and max orders
 - [x] Glassmorphism UI with backdrop-filter blur
 - [x] Emoji icons (no font dependencies)
+- [x] SVG brand logo (house + chef hat + flame icon)
+- [x] Back navigation buttons on stack screens
 - [x] Web deployment (Vercel)
 - [x] localStorage state persistence
 - [x] Order history
+- [x] Statement of Work (HTML) with logo
 
 ### Phase 2 — MVP (Next)
 - [ ] Real backend (Node.js/Next.js API)

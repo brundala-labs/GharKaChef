@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { GlassCard } from '../components/GlassCard';
+import { Logo } from '../components/Logo';
 import { colors, spacing, radius, typography } from '../theme';
 
 export function WelcomeScreen({ navigation }: any) {
@@ -9,7 +10,7 @@ export function WelcomeScreen({ navigation }: any) {
     <LinearGradient colors={[...colors.background]} style={styles.container}>
       <View style={styles.content}>
         <View style={styles.branding}>
-          <Text style={styles.logo}>GharKaChef</Text>
+          <Logo size={90} showText textSize={30} />
           <Text style={styles.tagline}>Ghar ka taste, freshly cooked today</Text>
           <Text style={styles.description}>
             Connecting verified home chefs with food lovers across Canada
@@ -89,8 +90,7 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
   },
   branding: { alignItems: 'center', marginBottom: spacing.xxxl },
-  logo: { fontSize: 34, fontWeight: '800', color: colors.text, marginBottom: spacing.xs },
-  tagline: { ...typography.h3, color: colors.primary, marginBottom: spacing.sm },
+  tagline: { ...typography.h3, color: colors.primary, marginBottom: spacing.sm, marginTop: spacing.sm },
   description: { ...typography.bodySmall, textAlign: 'center', paddingHorizontal: spacing.xl },
   cards: { gap: spacing.lg },
   roleCard: {},

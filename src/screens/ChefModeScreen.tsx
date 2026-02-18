@@ -53,8 +53,9 @@ function futureDate(daysFromNow: number): string {
 
 export function ChefModeScreen() {
   const { state, dispatch } = useApp();
-  const [selectedChefId, setSelectedChefId] = useState(state.chefs[0]?.id || '');
-  const [showChefPicker, setShowChefPicker] = useState(false);
+  const profileName = state.userProfile?.name || '';
+  const matchedChef = state.chefs.find((c) => c.name.toLowerCase() === profileName.toLowerCase());
+  const [selectedChefId] = useState(matchedChef?.id || state.chefs[0]?.id || '');
   const [showPlanMealModal, setShowPlanMealModal] = useState(false);
 
   const [mealName, setMealName] = useState('');
@@ -216,48 +217,13 @@ export function ChefModeScreen() {
       <Text style={styles.title}>Chef Mode</Text>
       <Text style={styles.subtitle}>Manage your kitchen</Text>
 
-      {/* Chef Picker */}
-      <TouchableOpacity
-        style={styles.pickerBtn}
-        onPress={() => setShowChefPicker(!showChefPicker)}
-        activeOpacity={0.7}
-      >
+      <View style={styles.chefBanner}>
         <Text style={{ fontSize: 20 }}>👤</Text>
-        <Text style={styles.pickerText}>{chef.name}</Text>
-        <Text style={{ fontSize: 14, color: colors.textSecondary }}>
-          {showChefPicker ? '▲' : '▼'}
-        </Text>
-      </TouchableOpacity>
-
-      {showChefPicker && (
-        <GlassCard style={styles.pickerDropdown}>
-          <View style={styles.pickerDropdownInner}>
-            {state.chefs.map((c) => (
-              <TouchableOpacity
-                key={c.id}
-                style={[
-                  styles.pickerOption,
-                  c.id === selectedChefId && styles.pickerOptionActive,
-                ]}
-                onPress={() => {
-                  setSelectedChefId(c.id);
-                  setShowChefPicker(false);
-                }}
-              >
-                <Text
-                  style={[
-                    styles.pickerOptionText,
-                    c.id === selectedChefId && styles.pickerOptionTextActive,
-                  ]}
-                >
-                  {c.name}
-                </Text>
-                <Text style={styles.pickerOptionCuisine}>{c.cuisine}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </GlassCard>
-      )}
+        <View style={{ flex: 1 }}>
+          <Text style={styles.chefBannerName}>{chef.name}</Text>
+          <Text style={styles.chefBannerCuisine}>{chef.cuisine}</Text>
+        </View>
+      </View>
 
       {/* Online Toggle */}
       <GlassCard style={styles.controlCard}>
@@ -609,7 +575,7 @@ const styles = StyleSheet.create({
   list: { padding: spacing.lg, paddingBottom: 100 },
   title: { ...typography.h1, marginBottom: spacing.xs },
   subtitle: { ...typography.bodySmall, marginBottom: spacing.lg },
-  pickerBtn: {
+  chefBanner: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
@@ -621,21 +587,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.cardBorder,
   },
-  pickerText: { ...typography.h3, flex: 1 },
-  pickerDropdown: { marginBottom: spacing.md },
-  pickerDropdownInner: { padding: spacing.sm },
-  pickerOption: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
-    borderRadius: radius.sm,
-  },
-  pickerOptionActive: { backgroundColor: colors.chipBg },
-  pickerOptionText: { ...typography.body },
-  pickerOptionTextActive: { color: colors.primary, fontWeight: '600' },
-  pickerOptionCuisine: { ...typography.caption },
+  chefBannerName: { ...typography.h3 },
+  chefBannerCuisine: { ...typography.caption, color: colors.textSecondary },
   controlCard: { marginBottom: spacing.md },
   controlRow: {
     flexDirection: 'row',

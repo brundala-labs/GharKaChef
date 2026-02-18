@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useApp } from '../context/AppContext';
 import { GlassCard } from '../components/GlassCard';
 import { colors, spacing, radius, typography } from '../theme';
+import { Logo, LogoMark } from '../components/Logo';
 import { Chef, VerifiedBadge } from '../types';
 
 const ALL_BADGES: VerifiedBadge[] = ['Health Permit', 'Inspected Kitchen', 'Food Handler'];
@@ -124,8 +125,13 @@ export function BrowseScreen({ navigation }: any) {
               <Text style={styles.demoText}>Demo only — mock data</Text>
             </View>
 
-            <Text style={styles.title}>GharKaChef</Text>
-            <Text style={styles.subtitle}>Ghar ka taste, freshly cooked today</Text>
+            <View style={styles.headerRow}>
+              <LogoMark size={36} />
+              <View>
+                <Text style={styles.title}>GharKaChef</Text>
+                <Text style={styles.subtitle}>Ghar ka taste, freshly cooked today</Text>
+              </View>
+            </View>
 
             {/* Search */}
             <View style={styles.searchRow}>
@@ -213,8 +219,14 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   demoText: { ...typography.caption, color: colors.primary },
-  title: { ...typography.h1, marginBottom: spacing.xs },
-  subtitle: { ...typography.bodySmall, marginBottom: spacing.md },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+    marginBottom: spacing.md,
+  },
+  title: { ...typography.h1, marginBottom: 2 },
+  subtitle: { ...typography.bodySmall },
 
   searchRow: {
     flexDirection: 'row',
