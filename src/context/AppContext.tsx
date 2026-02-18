@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { CartItem, Order, OrderStatus, Chef, PlannedMeal, Review } from '../types';
+import { CartItem, Order, OrderStatus, Chef, PlannedMeal, Review, UserProfile } from '../types';
 import { chefs as initialChefs } from '../data/mock';
 
 interface AppState {
@@ -7,6 +7,7 @@ interface AppState {
   cartChefId: string | null;
   orders: Order[];
   chefs: Chef[];
+  userProfile: UserProfile | null;
 }
 
 type Action =
@@ -22,13 +23,16 @@ type Action =
   | { type: 'CREATE_PLANNED_MEAL'; payload: { chefId: string; meal: PlannedMeal } }
   | { type: 'PREORDER_MEAL'; payload: { mealId: string; chefId: string } }
   | { type: 'ADD_REVIEW'; payload: Review }
-  | { type: 'SUBSCRIBE_WEEKLY'; payload: { chefId: string } };
+  | { type: 'SUBSCRIBE_WEEKLY'; payload: { chefId: string } }
+  | { type: 'SET_USER_PROFILE'; payload: UserProfile }
+  | { type: 'LOGOUT' };
 
 const initialState: AppState = {
   cart: [],
   cartChefId: null,
   orders: [],
   chefs: initialChefs,
+  userProfile: null,
 };
 
 function reducer(state: AppState, action: Action): AppState {
@@ -161,6 +165,10 @@ function reducer(state: AppState, action: Action): AppState {
     case 'SUBSCRIBE_WEEKLY':
       // Demo: no-op, just triggers UI confirmation
       return state;
+    case 'SET_USER_PROFILE':
+      return { ...state, userProfile: action.payload };
+    case 'LOGOUT':
+      return { ...state, userProfile: null, cart: [], cartChefId: null };
     default:
       return state;
   }

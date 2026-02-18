@@ -103,3 +103,14 @@ export interface PickupSlot {
   startHour: number;
   endHour: number;
 }
+
+export type UserRole = 'customer' | 'chef';
+
+export interface UserProfile {
+  name: string;
+  phone: string;
+  role: UserRole;
+  dietaryPreferences?: string[];
+  cuisineType?: string;
+  kitchenDescription?: string;
+}

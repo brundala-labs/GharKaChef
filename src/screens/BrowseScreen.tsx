@@ -64,28 +64,50 @@ function CountdownTimer({ expiresAt }: { expiresAt: string }) {
 export function BrowseScreen({ navigation }: any) {
   const { state, dispatch } = useApp();
   const [search, setSearch] = useState('');
+  const [cuisineFilter, setCuisineFilter] = useState<string | null>(null);
   const [prepFilter, setPrepFilter] = useState<4 | 8 | null>(null);
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [onlineOnly, setOnlineOnly] = useState(false);
 
-  // Gather all planned meals from all chefs
+  // Extract unique cuisines
+  const cuisines = useMemo(() => {
+    const set = new Set(state.chefs.map((c) => c.cuisine));
+    return Array.from(set).sort();
+  }, [state.chefs]);
+
+  // Search + cuisine filter helper
+  const matchesSearch = (name: string, cuisine: string, chefName?: string) => {
+    const q = search.toLowerCase().trim();
+    if (q && !name.toLowerCase().includes(q) && !cuisine.toLowerCase().includes(q) && !(chefName && chefName.toLowerCase().includes(q))) {
+      return false;
+    }
+    if (cuisineFilter && cuisine !== cuisineFilter) return false;
+    return true;
+  };
+
+  // Gather all planned meals
   const allPlannedMeals = useMemo(() => {
-    const meals: (PlannedMeal & { chefName: string })[] = [];
+    const meals: (PlannedMeal & { chefName: string; chefCuisine: string })[] = [];
     state.chefs.forEach((chef) => {
       (chef.plannedMeals || []).forEach((pm) => {
-        meals.push({ ...pm, chefName: chef.name });
+        meals.push({ ...pm, chefName: chef.name, chefCuisine: chef.cuisine });
       });
     });
     return meals.sort((a, b) => a.date.localeCompare(b.date));
   }, [state.chefs]);
 
-  const upcomingMeals = allPlannedMeals.filter((m) => !m.isLimitedDrop);
-  const limitedDrops = allPlannedMeals.filter((m) => m.isLimitedDrop);
+  // Filter planned meals by search/cuisine
+  const filteredPlannedMeals = useMemo(() => {
+    return allPlannedMeals.filter((m) => matchesSearch(m.name, m.chefCuisine, m.chefName));
+  }, [allPlannedMeals, search, cuisineFilter]);
 
-  // Chefs with weekly plans
+  const upcomingMeals = filteredPlannedMeals.filter((m) => !m.isLimitedDrop);
+  const limitedDrops = filteredPlannedMeals.filter((m) => m.isLimitedDrop);
+
+  // Chefs with weekly plans (filtered)
   const weeklyPlanChefs = useMemo(
-    () => state.chefs.filter((c) => c.weeklyPlan),
-    [state.chefs]
+    () => state.chefs.filter((c) => c.weeklyPlan && matchesSearch(c.name, c.cuisine)),
+    [state.chefs, search, cuisineFilter]
   );
 
   const filtered = useMemo(() => {
@@ -95,6 +117,9 @@ export function BrowseScreen({ navigation }: any) {
       list = list.filter(
         (c) => c.name.toLowerCase().includes(q) || c.cuisine.toLowerCase().includes(q)
       );
+    }
+    if (cuisineFilter) {
+      list = list.filter((c) => c.cuisine === cuisineFilter);
     }
     if (prepFilter) {
       list = list.filter((c) => c.defaultPrepWindowHours === prepFilter);
@@ -106,15 +131,11 @@ export function BrowseScreen({ navigation }: any) {
       list = list.filter((c) => c.isOnline);
     }
     return list;
-  }, [state.chefs, search, prepFilter, verifiedOnly, onlineOnly]);
+  }, [state.chefs, search, cuisineFilter, prepFilter, verifiedOnly, onlineOnly]);
 
   const handlePreOrder = (meal: PlannedMeal & { chefName: string }) => {
     if (meal.currentOrders >= meal.maxOrders) {
-      if (Platform.OS === 'web') {
-        alert('This meal is sold out!');
-      } else {
-        Alert.alert('Sold Out', 'This meal is fully booked!');
-      }
+      Platform.OS === 'web' ? alert('This meal is sold out!') : Alert.alert('Sold Out', 'This meal is fully booked!');
       return;
     }
     dispatch({ type: 'PREORDER_MEAL', payload: { mealId: meal.id, chefId: meal.chefId } });
@@ -133,20 +154,16 @@ export function BrowseScreen({ navigation }: any) {
         isPreOrder: true,
       },
     });
-    if (Platform.OS === 'web') {
-      alert(`Pre-ordered ${meal.name}! Added to cart.`);
-    } else {
-      Alert.alert('Pre-ordered!', `${meal.name} added to your cart.`);
-    }
+    Platform.OS === 'web'
+      ? alert(`Pre-ordered ${meal.name}! Added to cart.`)
+      : Alert.alert('Pre-ordered!', `${meal.name} added to your cart.`);
   };
 
   const handleSubscribe = (chef: Chef) => {
     dispatch({ type: 'SUBSCRIBE_WEEKLY', payload: { chefId: chef.id } });
-    if (Platform.OS === 'web') {
-      alert(`Subscribed to ${chef.name}'s weekly plan! (Demo)`);
-    } else {
-      Alert.alert('Subscribed!', `You're now subscribed to ${chef.name}'s weekly plan. (Demo)`);
-    }
+    Platform.OS === 'web'
+      ? alert(`Subscribed to ${chef.name}'s weekly plan! (Demo)`)
+      : Alert.alert('Subscribed!', `You're now subscribed to ${chef.name}'s weekly plan. (Demo)`);
   };
 
   const renderChef = ({ item }: { item: Chef }) => {
@@ -173,9 +190,7 @@ export function BrowseScreen({ navigation }: any) {
               <View style={styles.ratingRow}>
                 <Ionicons name="star" size={14} color={colors.warning} />
                 <Text style={styles.ratingText}>{item.rating}</Text>
-                {reviewCount > 0 && (
-                  <Text style={styles.reviewCountText}>({reviewCount})</Text>
-                )}
+                {reviewCount > 0 && <Text style={styles.reviewCountText}>({reviewCount})</Text>}
               </View>
               <Text style={styles.distanceText}>{item.distanceKm} km</Text>
               <Text style={styles.prepText}>Ready in {item.defaultPrepWindowHours}h</Text>
@@ -225,6 +240,50 @@ export function BrowseScreen({ navigation }: any) {
             <Text style={styles.title}>GharKaChef</Text>
             <Text style={styles.subtitle}>Ghar ka taste, freshly cooked today</Text>
 
+            {/* Search — at the top */}
+            <View style={styles.searchRow}>
+              <Ionicons name="search" size={18} color={colors.textLight} style={styles.searchIcon} />
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search chef, cuisine, or meal..."
+                placeholderTextColor={colors.textLight}
+                value={search}
+                onChangeText={setSearch}
+              />
+              {search.length > 0 && (
+                <TouchableOpacity onPress={() => setSearch('')}>
+                  <Ionicons name="close-circle" size={18} color={colors.textLight} />
+                </TouchableOpacity>
+              )}
+            </View>
+
+            {/* Cuisine Chips */}
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.cuisineScroll}>
+              <TouchableOpacity
+                style={[styles.cuisineChip, !cuisineFilter && styles.cuisineChipActive]}
+                onPress={() => setCuisineFilter(null)}
+              >
+                <Text style={[styles.cuisineChipText, !cuisineFilter && styles.cuisineChipTextActive]}>All</Text>
+              </TouchableOpacity>
+              {cuisines.map((c) => (
+                <TouchableOpacity
+                  key={c}
+                  style={[styles.cuisineChip, cuisineFilter === c && styles.cuisineChipActive]}
+                  onPress={() => setCuisineFilter(cuisineFilter === c ? null : c)}
+                >
+                  <Text style={[styles.cuisineChipText, cuisineFilter === c && styles.cuisineChipTextActive]}>{c}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+
+            {/* Filter Chips */}
+            <View style={styles.filterRow}>
+              <Chip label="4h Prep" active={prepFilter === 4} onPress={() => setPrepFilter(prepFilter === 4 ? null : 4)} />
+              <Chip label="8h Prep" active={prepFilter === 8} onPress={() => setPrepFilter(prepFilter === 8 ? null : 8)} />
+              <Chip label="Verified" active={verifiedOnly} onPress={() => setVerifiedOnly(!verifiedOnly)} />
+              <Chip label="Online" active={onlineOnly} onPress={() => setOnlineOnly(!onlineOnly)} />
+            </View>
+
             {/* Limited Drops */}
             {limitedDrops.length > 0 && (
               <View style={styles.sectionContainer}>
@@ -244,9 +303,7 @@ export function BrowseScreen({ navigation }: any) {
                         <View style={styles.dropOverlay}>
                           {meal.dropExpiresAt && <CountdownTimer expiresAt={meal.dropExpiresAt} />}
                           <View style={styles.spotsLeftBadge}>
-                            <Text style={styles.spotsLeftText}>
-                              {meal.maxOrders - meal.currentOrders} spots left!
-                            </Text>
+                            <Text style={styles.spotsLeftText}>{meal.maxOrders - meal.currentOrders} spots left!</Text>
                           </View>
                         </View>
                         <View style={styles.dropBody}>
@@ -303,9 +360,7 @@ export function BrowseScreen({ navigation }: any) {
                           </View>
                           <View style={styles.mealFooter}>
                             <Text style={styles.mealPrice}>${meal.price.toFixed(2)}</Text>
-                            <Text style={styles.spotsText}>
-                              {meal.maxOrders - meal.currentOrders} spots left
-                            </Text>
+                            <Text style={styles.spotsText}>{meal.maxOrders - meal.currentOrders} spots left</Text>
                           </View>
                           <TouchableOpacity
                             style={[styles.preorderSmallBtn, meal.currentOrders >= meal.maxOrders && styles.preorderBtnSoldOut]}
@@ -341,16 +396,10 @@ export function BrowseScreen({ navigation }: any) {
                             <Text style={styles.weeklyCuisine}>{c.cuisine}</Text>
                           </View>
                         </View>
-                        <Text style={styles.weeklyDesc} numberOfLines={2}>
-                          {c.weeklyPlan!.description}
-                        </Text>
+                        <Text style={styles.weeklyDesc} numberOfLines={2}>{c.weeklyPlan!.description}</Text>
                         <View style={styles.weeklyMeta}>
-                          <Text style={styles.weeklyMeals}>
-                            {c.weeklyPlan!.mealsPerWeek} meals/week
-                          </Text>
-                          <Text style={styles.weeklyPrice}>
-                            ${c.weeklyPlan!.pricePerMeal}/meal
-                          </Text>
+                          <Text style={styles.weeklyMeals}>{c.weeklyPlan!.mealsPerWeek} meals/week</Text>
+                          <Text style={styles.weeklyPrice}>${c.weeklyPlan!.pricePerMeal}/meal</Text>
                         </View>
                         <View style={styles.weeklyDietaryRow}>
                           {c.weeklyPlan!.dietaryOptions.map((opt) => (
@@ -359,10 +408,7 @@ export function BrowseScreen({ navigation }: any) {
                             </View>
                           ))}
                         </View>
-                        <TouchableOpacity
-                          style={styles.subscribeBtn}
-                          onPress={() => handleSubscribe(c)}
-                        >
+                        <TouchableOpacity style={styles.subscribeBtn} onPress={() => handleSubscribe(c)}>
                           <Ionicons name="calendar" size={14} color={colors.white} />
                           <Text style={styles.subscribeBtnText}>Subscribe</Text>
                         </TouchableOpacity>
@@ -372,25 +418,6 @@ export function BrowseScreen({ navigation }: any) {
                 </ScrollView>
               </View>
             )}
-
-            {/* Search & Filters */}
-            <View style={styles.searchRow}>
-              <Ionicons name="search" size={18} color={colors.textLight} style={styles.searchIcon} />
-              <TextInput
-                style={styles.searchInput}
-                placeholder="Search chef or cuisine..."
-                placeholderTextColor={colors.textLight}
-                value={search}
-                onChangeText={setSearch}
-              />
-            </View>
-
-            <View style={styles.filterRow}>
-              <Chip label="4h Prep" active={prepFilter === 4} onPress={() => setPrepFilter(prepFilter === 4 ? null : 4)} />
-              <Chip label="8h Prep" active={prepFilter === 8} onPress={() => setPrepFilter(prepFilter === 8 ? null : 8)} />
-              <Chip label="Verified" active={verifiedOnly} onPress={() => setVerifiedOnly(!verifiedOnly)} />
-              <Chip label="Online" active={onlineOnly} onPress={() => setOnlineOnly(!onlineOnly)} />
-            </View>
 
             <Text style={styles.resultCount}>
               {filtered.length} verified local kitchen{filtered.length !== 1 ? 's' : ''}
@@ -435,9 +462,60 @@ const styles = StyleSheet.create({
   },
   demoText: { ...typography.caption, color: colors.primary },
   title: { ...typography.h1, marginBottom: spacing.xs },
-  subtitle: { ...typography.bodySmall, marginBottom: spacing.lg },
+  subtitle: { ...typography.bodySmall, marginBottom: spacing.md },
 
-  // Section headers
+  // Search
+  searchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    borderRadius: radius.md,
+    paddingHorizontal: spacing.md,
+    marginBottom: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+  },
+  searchIcon: { marginRight: spacing.sm },
+  searchInput: {
+    flex: 1,
+    height: 44,
+    ...typography.body,
+    color: colors.text,
+  },
+
+  // Cuisine Chips
+  cuisineScroll: { marginBottom: spacing.sm, marginHorizontal: -spacing.lg, paddingHorizontal: spacing.lg },
+  cuisineChip: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.full,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    marginRight: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+  },
+  cuisineChipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  cuisineChipText: { ...typography.caption, color: colors.text, fontWeight: '600' },
+  cuisineChipTextActive: { color: colors.white },
+
+  // Filter Chips
+  filterRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginBottom: spacing.md,
+  },
+  chip: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.full,
+    backgroundColor: colors.chipBg,
+  },
+  chipActive: { backgroundColor: colors.chipActiveBg },
+  chipLabel: { ...typography.caption, color: colors.chipText, fontWeight: '600' },
+  chipLabelActive: { color: colors.chipActiveText },
+
+  // Sections
   sectionContainer: { marginBottom: spacing.lg },
   sectionHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.sm },
   sectionTitle: { ...typography.h3 },
@@ -540,39 +618,6 @@ const styles = StyleSheet.create({
   },
   weeklyBadgeText: { ...typography.caption, color: colors.secondary, fontWeight: '600' },
 
-  // Search & Filters
-  searchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.7)',
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
-    marginBottom: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-  },
-  searchIcon: { marginRight: spacing.sm },
-  searchInput: {
-    flex: 1,
-    height: 44,
-    ...typography.body,
-    color: colors.text,
-  },
-  filterRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-    marginBottom: spacing.md,
-  },
-  chip: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.full,
-    backgroundColor: colors.chipBg,
-  },
-  chipActive: { backgroundColor: colors.chipActiveBg },
-  chipLabel: { ...typography.caption, color: colors.chipText, fontWeight: '600' },
-  chipLabelActive: { color: colors.chipActiveText },
   resultCount: { ...typography.bodySmall, marginBottom: spacing.md },
 
   // Chef Cards
